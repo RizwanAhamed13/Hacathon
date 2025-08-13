@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error Proof Verification Checklist FDY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #232946;
+      --secondary: #F9F4F0;
+      --success: #43AA8B;
+      --warning: #FFC857;
+      --danger: #E63946;
+      --light-gray: #4A4E69;
+      --dark-gray: #22223B;
+      --primary-accent: #D2691E;
+      --accent-fade: #F4A261;
+      --card-border: rgba(255, 255, 255, 0.18);
+      --radius-lg: 22px;
+      --transition: cubic-bezier(.4,.9,.35,1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6);
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6);
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6);
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    body {
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      opacity: 0.13;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .fullscreen-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-section {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #e65100;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      min-width: 320px;
+      min-height: 160px;
+      display: block;
+    }
+    
+    .header-section::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 50px;
+      width: 300px;
+      height: 230px;
+      background-image: url('bg2.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.8;
+    }
+    
+    .header-logo {
+      background: none !important;
+      background-color: transparent !important;
+      position: absolute;
+      left: 88px;
+      top: 18px;
+      width: 180px;
+      height: 100px;
+      z-index: 3;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      pointer-events: none;
+    }
+    
+    @media (max-width: 600px) {
+      .header-section {
+        min-width: 0;
+        min-height: 120px;
+        padding: 1.2rem 0.5rem;
+      }
+      .header-logo {
+        width: 44px;
+        top: 8px;
+        left: 8px;
+        height: 44px;
+      }
+    }
+    
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      color: #e65100;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: 0.9;
+      font-weight: 400;
+      color: var(--light-gray);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .main-title, .subtitle {
+      color: #e65100 !important;
+      position: relative;
+      z-index: 2;
+    }
+
+    .form-container {
+      flex: 1 1 auto;
+      width: 100vw;
+      min-height: 0;
+      margin: 0;
+      padding: 1.5rem;
+      border: none;
+      border-radius: 0;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .form-section {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      border-radius: 16px;
+      margin: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.28);
+      max-width: calc(100vw - 3rem);
+      width: calc(100% - 1rem);
+    }
+
+    .form-section h3 {
+      margin-top: 0;
+      color: #1e293b;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1.5rem 0;
+      padding-bottom: 0.8rem;
+      border-bottom: 3px solid #e0f2fe;
+      position: relative;
+    }
+    
+    .form-section h3:first-of-type {
+      margin-top: 1.5rem;
+    }
+    
+    .form-section h3::before {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      border-radius: 2px;
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      position: relative;
+      min-height: 1.2rem;
+    }
+    
+    label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      transition: width 0.3s ease;
+    }
+    
+    .form-group:focus-within label::after {
+      width: 100%;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+      height: 50px;
+      box-sizing: border-box;
+    }
+    
+    textarea {
+      min-height: 50px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+    
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: linear-gradient(to right, #FFE0B2, #FFB74D);
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    
+    input:hover:not(:focus),
+    textarea:hover:not(:focus),
+    select:hover:not(:focus) {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 1.2rem 2.5rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      min-width: 200px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+    }
+    
+    button:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    .btn-secondary:hover {
+      background: #545b62;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      width: 100%;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Preloader Styles */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ripple-wrapper {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .ripple-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100px;
+      width: 100px;
+      z-index: 2;
+      background: url('../bgsakthi.png') no-repeat center center/contain;
+      animation: heartbeat 1.5s infinite cubic-bezier(.4,0,.6,1);
+    }
+
+    .ripple {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 179, 102, 0.2);
+      transform: translate(-50%, -50%) scale(1);
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      animation: ripple-effect 2s cubic-bezier(.4,.9,.35,1) infinite;
+    }
+
+    .ripple.ripple2 {
+      animation-delay: 0.5s;
+    }
+
+    @keyframes ripple-effect {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+      }
+      70% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes heartbeat {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      20% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      40% {
+        transform: translate(-50%, -50%) scale(0.95);
+      }
+      60%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+    .table-section {
+  flex: 1;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  margin: 1rem;
+}
+
+.table-header {
+  margin-bottom: 1.5rem;
+}
+
+.table-header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Table Styles */
+.table-responsive {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background-color: white;
+  color: #222;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+}
+
+td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .table-responsive {
+    border-radius: 8px;
+  }
+  
+  th, td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="particles-background" id="particles-background"></div>
+  <!-- Preloader -->
+  <div class="loader">
+    <div class="ripple-wrapper">
+      <div class="ripple"></div>
+      <div class="ripple ripple2"></div>
+      <div class="ripple-logo"></div>
+    </div>
+  </div>
+
+  <div class="fullscreen-container" data-aos="fade-in">
+    <img src="../bg2.png" alt="Logo" class="header-logo">
+    <div class="header-section" data-aos="fade-down">
+      <h1 class="main-title">Error Proof Verification Checklist FDY</h1>
+      <p class="subtitle">By Nexus Tech</p>
+    </div>
+
+    <div class="form-container" data-aos="fade-up" data-aos-delay="100">
+      <div class="nav-buttons">
+        <button class="btn-secondary" onclick="window.location.href='../index.html'">
+          <i class="lucide lucide-arrow-left"></i>
+          Back to Main Menu
+        </button>
+      </div>
+
+      <div class="form-section" data-aos="fade-up" data-aos-delay="200">
+        <form id="epvcfdy-form">
+          <h3>Basic Information</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="shift">Shift</label>
+              <input type="text" id="shift" name="shift" required>
+            </div>
+            <div class="form-group">
+              <label for="operator">Operator</label>
+              <input type="text" id="operator" name="operator" required>
+            </div>
+            <div class="form-group">
+              <label for="line">Line</label>
+              <input type="text" id="line" name="line" required>
+            </div>
+            <div class="form-group">
+              <label for="serial_no">Serial No</label>
+              <input type="number" id="serial_no" name="serial_no" required>
+            </div>
+          </div>
+
+          <h3>Error Proof Details</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="error_proof_no">Error Proof No</label>
+              <input type="text" id="error_proof_no" name="error_proof_no" required>
+            </div>
+            <div class="form-group">
+              <label for="error_proof_name">Error Proof Name</label>
+              <input type="text" id="error_proof_name" name="error_proof_name" required>
+            </div>
+            <div class="form-group">
+              <label for="verification_date_shift">Verification Date/Shift</label>
+              <input type="text" id="verification_date_shift" name="verification_date_shift" required>
+            </div>
+            <div class="form-group">
+              <label for="nature_of_error_proof">Nature of Error Proof</label>
+              <input type="text" id="nature_of_error_proof" name="nature_of_error_proof" required>
+            </div>
+            <div class="form-group">
+              <label for="frequency">Frequency</label>
+              <input type="text" id="frequency" name="frequency" required>
+            </div>
+          </div>
+
+          <h3>Observations</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="date1_shift1_obs">Date1 Shift1 Obs</label>
+              <input type="text" id="date1_shift1_obs" name="date1_shift1_obs">
+            </div>
+            <div class="form-group">
+              <label for="date1_shift2_obs">Date1 Shift2 Obs</label>
+              <input type="text" id="date1_shift2_obs" name="date1_shift2_obs">
+            </div>
+            <div class="form-group">
+              <label for="date1_shift3_obs">Date1 Shift3 Obs</label>
+              <input type="text" id="date1_shift3_obs" name="date1_shift3_obs">
+            </div>
+            <div class="form-group">
+              <label for="date2_shift1_obs">Date2 Shift1 Obs</label>
+              <input type="text" id="date2_shift1_obs" name="date2_shift1_obs">
+            </div>
+            <div class="form-group">
+              <label for="date2_shift2_obs">Date2 Shift2 Obs</label>
+              <input type="text" id="date2_shift2_obs" name="date2_shift2_obs">
+            </div>
+            <div class="form-group">
+              <label for="date2_shift3_obs">Date2 Shift3 Obs</label>
+              <input type="text" id="date2_shift3_obs" name="date2_shift3_obs">
+            </div>
+            <div class="form-group">
+              <label for="date3_shift1_obs">Date3 Shift1 Obs</label>
+              <input type="text" id="date3_shift1_obs" name="date3_shift1_obs">
+            </div>
+            <div class="form-group">
+              <label for="date3_shift2_obs">Date3 Shift2 Obs</label>
+              <input type="text" id="date3_shift2_obs" name="date3_shift2_obs">
+            </div>
+            <div class="form-group">
+              <label for="date3_shift3_obs">Date3 Shift3 Obs</label>
+              <input type="text" id="date3_shift3_obs" name="date3_shift3_obs">
+            </div>
+          </div>
+
+          <h3>Issue Tracking</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="problem">Problem</label>
+              <input type="text" id="problem" name="problem">
+            </div>
+            <div class="form-group">
+              <label for="root_cause">Root Cause</label>
+              <input type="text" id="root_cause" name="root_cause">
+            </div>
+            <div class="form-group">
+              <label for="corrective_action">Corrective Action</label>
+              <input type="text" id="corrective_action" name="corrective_action">
+            </div>
+            <div class="form-group">
+              <label for="status">Status</label>
+              <select id="status" name="status">
+                <option value="Open">Open</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="reviewed_by">Reviewed By</label>
+              <input type="text" id="reviewed_by" name="reviewed_by">
+            </div>
+            <div class="form-group">
+              <label for="approved_by">Approved By</label>
+              <input type="text" id="approved_by" name="approved_by">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="checklist">Checklist</label>
+            <textarea id="checklist" name="checklist" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="remarks">Remarks</label>
+            <textarea id="remarks" name="remarks"></textarea>
+          </div>
+
+          <div class="button-group">
+            <button type="submit">
+              Submit Checklist
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<div class="table-section" data-aos="fade" >
+  <div class="table-header">
+    <h2>Error Proof Verification Checklist Records</h2>
+  </div>
+  <div class="table-responsive">
+    <table id="results-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Shift</th>
+          <th>Operator</th>
+          <th>Line</th>
+          <th>Serial No</th>
+          <th>Error Proof No</th>
+          <th>Error Proof Name</th>
+          <th>Verification Date/Shift</th>
+          <th>Nature of Error Proof</th>
+          <th>Frequency</th>
+          <th>Date1 Shift1</th>
+          <th>Date1 Shift2</th>
+          <th>Date1 Shift3</th>
+          <th>Date2 Shift1</th>
+          <th>Date2 Shift2</th>
+          <th>Date2 Shift3</th>
+          <th>Date3 Shift1</th>
+          <th>Date3 Shift2</th>
+          <th>Date3 Shift3</th>
+          <th>Problem</th>
+          <th>Root Cause</th>
+          <th>Corrective Action</th>
+          <th>Status</th>
+          <th>Reviewed By</th>
+          <th>Approved By</th>
+        </tr>
+      </thead>
+      <tbody id="results-table-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="/Error Proof Verification Checklist FDY/app.js"></script>
+  <script>
+    // Particle.js initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+    
+    // Initialize AOS animations
+    AOS.init({
+      duration: 600,
+      easing: 'ease-out-quad',
+      once: true,
+      offset: 50
+    });
+
+    // Preloader
+    window.addEventListener('load', function() {
+      const loader = document.querySelector('.loader');
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+      }, 1000);
+    });
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      document.getElementById('date').value = `${year}-${month}-${day}`;
+    });
+  </script>
+</body>
+</html>

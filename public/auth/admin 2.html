@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      font-family: 'Roboto', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .dashboard {
+      max-width: 700px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.2);
+      padding: 2rem 2.5rem;
+    }
+    h2 {
+      color: #185a9d;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .user-list {
+      margin-bottom: 2rem;
+    }
+    .user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .user:last-child {
+      border-bottom: none;
+    }
+    .forms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .form-checkbox {
+      margin-right: 0.5rem;
+    }
+    button {
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #185a9d, #43cea2);
+    }
+    .success {
+      color: #27ae60;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .error {
+      color: #e74c3c;
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Admin Dashboard</h2>
+    <div id="user-list" class="user-list"></div>
+    <div id="message"></div>
+  </div>
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token || localStorage.getItem('role') !== 'admin') {
+      window.location.href = '/auth/login.html';
+    }
+    // List of forms (update as needed)
+    const forms = [
+      'Carbon Sulphur Leco Analysis Register',
+      'Error Proof Verification Checklist FDY',
+      'Hardness Test Record',
+      'Impact Test Report',
+      'Inspection Register',
+      'Inspection Result Report',
+      'Microstructure Analysis',
+      'Online Micro Coupon',
+      'QC Register',
+      'Rejection Analysis Register',
+      'Tensile Test Report',
+      'Time Study',
+      'MSI 90',
+      'msi 90 incolation'
+    ];
+    async function fetchUsers() {
+      const res = await fetch('http://localhost:3000/admin/list-users', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      const userList = document.getElementById('user-list');
+      userList.innerHTML = '';
+      if (Array.isArray(data)) {
+        data.forEach(user => {
+          if (user.role !== 'admin') {
+            const div = document.createElement('div');
+            div.className = 'user';
+            div.innerHTML = `
+              <span><strong>${user.username}</strong></span>
+              <div class="forms">
+                ${forms.map(form => `<label><input type="checkbox" class="form-checkbox" value="${form}" ${user.form_access && user.form_access.split(',').includes(form) ? 'checked' : ''}>${form}</label>`).join('')}
+              </div>
+              <button onclick="assignAccess(${user.id}, this)">Save</button>
+            `;
+            userList.appendChild(div);
+          }
+        });
+      }
+    }
+    async function assignAccess(userId, btn) {
+      const div = btn.parentElement;
+      const checkboxes = div.querySelectorAll('.form-checkbox');
+      const selectedForms = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      const res = await fetch('http://localhost:3000/auth/assign-access', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ userId, forms: selectedForms })
+      });
+      const data = await res.json();
+      const msgDiv = document.getElementById('message');
+      if (data.success) {
+        msgDiv.textContent = 'Access updated!';
+        msgDiv.className = 'success';
+      } else {
+        msgDiv.textContent = data.error || 'Error updating access.';
+        msgDiv.className = 'error';
+      }
+      setTimeout(() => { msgDiv.textContent = ''; }, 2000);
+      fetchUsers();
+    }
+    fetchUsers();
+  </script>
+</body>
+</html>

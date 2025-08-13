@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.2/src/css/ph.css">
+  <link href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #FAFAFA;
+      --primary-accent: #D2691E;
+      --accent-light: #f5e3d4;
+      --accent-fade: #F4A261;
+      --card-border: #ede5dc;
+      --text-dark: #222;
+      --text-mid: #666;
+      --shadow-main: 0 8px 32px rgba(210, 105, 30, 0.13), 0 2px 12px rgba(244, 162, 97, 0.09);
+      --shadow-deep: 0 6px 14px rgba(151, 97, 47, .09), 0 1px 6px rgba(244,162,97,.07);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --transition: cubic-bezier(.4,.9,.35,1);
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+
+    html, body {
+      font-family: 'Poppins', 'Montserrat', sans-serif;
+      background: linear-gradient(rgba(249, 244, 248, 0.93), rgba(249, 244, 248, 0.92)), url('steel3.jpeg') center center/cover no-repeat;
+      color: var(--text-dark);
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+
+    .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6);
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6);
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6);
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .dashboard-card {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.28);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary-accent), var(--accent-fade));
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      flex-shrink: 0;
+    }
+
+    .dashboard-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--primary-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .forms-container {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .form-card {
+      background: rgba(255,255,255,0.25);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-deep);
+      transition: all 0.3s var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+
+    .form-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(210, 105, 30, 0.15);
+      background: rgba(255,255,255,0.35);
+    }
+
+    .form-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-accent);
+    }
+
+    .form-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-desc {
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-card {
+        padding: 1.5rem;
+      }
+      
+      .forms-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles-background" id="particles-background"></div>
+
+  <div class="dashboard-card" data-aos="zoom-in" data-aos-duration="800">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Your Forms</h1>
+      <p>Access your assigned quality control forms</p>
+    </div>
+    <div id="forms" class="forms-container"></div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+
+    // Create particles
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+
+    const token = localStorage.getItem('token');
+    if (!token || localStorage.getItem('role') !== 'user') {
+      window.location.href = '/auth/login.html';
+    }
+
+    // Form icons mapping
+    const formIcons = {
+      'Carbon Sulphur Leco Analysis Register': 'ph-flask',
+      'Error Proof Verification Checklist FDY': 'ph-check-circle',
+      'Hardness Test Record': 'ph-hammer',
+      'Impact Test Report': 'ph-lightning',
+      'Inspection Register': 'ph-magnifying-glass',
+      'Inspection Result Report': 'ph-clipboard-text',
+      'Microstructure Analysis': 'ph-microscope',
+      'Online Micro Coupon': 'ph-credit-card',
+      'QC Register': 'ph-clipboard',
+      'Rejection Analysis Register': 'ph-warning-circle',
+      'Tensile Test Report': 'ph-arrows-out',
+      'Time Study': 'ph-clock',
+      'MSI 90': 'ph-file-text',
+      'MSI 90 Incolation': 'ph-file-text'
+    };
+
+    // Form descriptions
+    const formDescriptions = {
+      'Carbon Sulphur Leco Analysis Register': 'Record carbon and sulfur content analysis results',
+      'Error Proof Verification Checklist FDY': 'Verify error-proofing measures for FDY processes',
+      'Hardness Test Record': 'Document material hardness test results',
+      'Impact Test Report': 'Record impact resistance test findings',
+      'Inspection Register': 'Log all quality inspection activities',
+      'Inspection Result Report': 'Detailed report of inspection outcomes',
+      'Microstructure Analysis': 'Analysis of material microstructure',
+      'Online Micro Coupon': 'Digital coupon tracking system',
+      'QC Register': 'Master quality control documentation',
+      'Rejection Analysis Register': 'Track and analyze rejected materials',
+      'Tensile Test Report': 'Record tensile strength measurements',
+      'Time Study': 'Production process time analysis',
+      'MSI 90': 'Material Safety Information documentation',
+      'MSI 90 Incolation': 'Incolation process safety information'
+    };
+
+    async function fetchForms() {
+      try {
+        const res = await fetch('http://localhost:3000/auth/user/forms', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        const formsContainer = document.getElementById('forms');
+        formsContainer.innerHTML = '';
+        
+        // Map form names to actual directory paths
+        const formPaths = {
+          'Carbon Sulphur Leco Analysis Register': 'Carbon Sulphur Leco Analysis Register/index.html',
+          'Error Proof Verification Checklist FDY': 'Error Proof Verification Checklist FDY/index.html',
+          'Hardness Test Record': 'Hardness Test Record/index.html',
+          'Impact Test Report': 'Impact Test Report/index.html',
+          'Inspection Register': 'Inspection Register/index.html',
+          'Inspection Result Report': 'Inspection Result Report/index.html',
+          'Microstructure Analysis': 'Microstructure Analysis/index.html',
+          'Online Micro Coupon': 'Online Micro Coupon/index.html',
+          'QC Register': 'QC Register/index.html',
+          'Rejection Analysis Register': 'Rejection Analysis Register/index.html',
+          'Tensile Test Report': 'Tensile Test Report/index.html',
+          'Time Study': 'Time Study/index.html',
+          'MSI 90': 'MSI 90/fbq02.html',
+          'MSI 90 Incolation': 'msi 90 incolation/fbq03.html'
+        };
+        if (Array.isArray(data)) {
+          data.forEach(form => {
+            const formCard = document.createElement('a');
+            formCard.className = 'form-card';
+            formCard.href = `/public/${formPaths[form] || 'index.html'}`;
+            formCard.innerHTML = `
+              <i class="ph ${formIcons[form] || 'ph-file-text'} form-icon"></i>
+              <div class="form-name">${form}</div>
+              <div class="form-desc">${formDescriptions[form] || 'Quality control form'}</div>
+            `;
+            formsContainer.appendChild(formCard);
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching forms:', error);
+      }
+    }
+
+    fetchForms();
+  </script>
+</body>
+</html>

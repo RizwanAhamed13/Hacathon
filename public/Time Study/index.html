@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Time Study And Process Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #232946;
+            --secondary: #F9F4F0;
+            --success: #43AA8B;
+            --warning: #FFC857;
+            --danger: #E63946;
+            --light-gray: #4A4E69;
+            --dark-gray: #22223B;
+            --primary-accent: #D2691E;
+            --accent-fade: #F4A261;
+            --card-border: rgba(255, 255, 255, 0.18);
+            --radius-lg: 22px;
+            --transition: cubic-bezier(.4,.9,.35,1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+       .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6); /* Chocolate color particles */
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6); /* Lighter accent color */
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6); /* White particles */
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Update your body styles to remove the old background */
+    body {
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      opacity: 0.13;
+      z-index: 0;
+      pointer-events: none;
+    }
+        /* Preloader Styles */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .ripple-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .ripple-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 100px;
+            width: 100px;
+            z-index: 2;
+            background: url('../bgsakthi.png') no-repeat center center/contain;
+            animation: heartbeat 1.5s infinite cubic-bezier(.4,0,.6,1);
+        }
+
+        .ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 179, 102, 0.2);
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+            animation: ripple-effect 2s cubic-bezier(.4,.9,.35,1) infinite;
+        }
+
+        .ripple.ripple2 {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes ripple-effect {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.7;
+            }
+            70% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            60%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Full Screen Layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            width: 100vw;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-section {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #e65100;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .main-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            color: #e65100 !important;
+            position: relative;
+        }
+
+        /* Main Content - Takes remaining space */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 1rem;
+        }
+
+        /* Form and Table Container */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255,255,255,0.28);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* Form Section */
+        .form-section {
+            background:  rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            margin: 1rem;
+            border: 1px solid rgba(255,255,255,0.28);
+        }
+
+        /* Table Section - Takes remaining space */
+        .table-section {
+            flex: 1;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            margin: 1rem;
+            border: 1px solid rgba(255,255,255,0.28);
+        }
+
+        .table-header {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        /* Form Grid Layout - Updated for side-by-side alignment */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Side-by-side form sections */
+        .form-sections-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            ;
+        }
+
+        .form-subsection {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .form-section h2 {
+            color: #1e293b;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid #e0f2fe;
+            position: relative;
+        }
+
+        .form-section h2::before {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #FFE0B2, #FFB74D);
+            border-radius: 2px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            position: relative;
+            min-height: 1.2rem;
+        }
+
+        .form-group label::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #FFE0B2, #FFB74D);
+            transition: width 0.3s ease;
+        }
+
+        .form-group:focus-within label::after {
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"],
+        select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            height: 50px;
+            box-sizing: border-box;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary-accent);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(210, 105, 30, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        input:hover:not(:focus),
+        select:hover:not(:focus) {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+            margin-top: 1rem;
+        }
+
+        button[type="submit"]:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            flex: 1;
+            overflow: auto;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: #fff;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: white;
+            color: #222;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border: none;
+            box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+        }
+
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        tr:hover {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            transform: translateY(-1px);
+            transition: all 0.2s ease;
+        }
+
+        tr:last-child td:first-child {
+            border-bottom-left-radius: 12px;
+        }
+
+        tr:last-child td:last-child {
+            border-bottom-right-radius: 12px;
+        }
+
+        /* Status indicators */
+        .checked-cell {
+            color: var(--success);
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .unchecked-cell {
+            color: var(--danger);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .form-sections-container {
+                flex-direction: column;
+            }
+            
+            .form-section, .table-section {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            
+            .main-title {
+                font-size: 1.75rem;
+            }
+            
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+     <div class="particles-background" id="particles-background"></div>
+    <!-- Preloader -->
+    <div class="loader">
+        <div class="ripple-wrapper">
+            <div class="ripple"></div>
+            <div class="ripple ripple2"></div>
+            <div class="ripple-logo"></div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="main-title">QC Management System</h1>
+            <p class="subtitle">By Nexus Tech</p>
+            <p class="subtitle"> TIME STUDY AND PROCESS CONTROL</p>
+        </div>
+
+        <div class="main-content">
+            <div class="content-container">
+                <div class="form-section" data-aos="fade-up" data-aos-delay="100">
+                    <div class="nav-buttons">
+                        <a href="../index.html" class="btn">
+                            <i class="lucide lucide-arrow-left"></i>
+                            Back to Main Menu
+                        </a>
+                    </div>
+
+                    <form id="timeStudyForm">
+                        <!-- Basic Information Section -->
+                        <div class="form-sections-container">
+                            <div class="form-subsection">
+                                <h2>Basic Information</h2>
+                                
+                                <div class="form-group required">
+                                    <label for="shift">Shift</label>
+                                    <select id="shift" required>
+                                        <option value="">Select shift</option>
+                                        <option value="A">Shift 1</option>
+                                        <option value="B">Shift 2</option>
+                                        <option value="C">Shift 3</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group required">
+                                    <label for="part_name">Part Name</label>
+                                    <input type="text" id="part_name" required>
+                                </div>
+                                
+                                <div class="form-group required">
+                                    <label for="heat_code">Heat Code</label>
+                                    <input type="text" id="heat_code" required>
+                                </div>
+                                
+                                <div class="form-group required">
+                                    <label for="grade">Grade</label>
+                                    <input type="text" id="grade" name="grade" required>
+                                </div>
+                            </div>
+
+                            <!-- Chemical Composition Section -->
+                            <div class="form-subsection">
+                                <h2> BATH CHEMISTRY ( in % )</h2>
+                                
+                                <div class="form-group">
+                                    <label for="c">C</label>
+                                    <input type="number" id="c" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="si">Si</label>
+                                    <input type="number" id="si" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="mn">Mn</label>
+                                    <input type="number" id="mn" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="p">P</label>
+                                    <input type="number" id="p" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="s">S</label>
+                                    <input type="number" id="s" step="0.01">
+                                </div>
+                            </div>
+
+                            <!-- Second Column of Chemical Composition -->
+                            <div class="form-subsection">
+                                <h2 > BATH CHEMISTRY ( in % )</h2>
+                                
+                                <div class="form-group">
+                                    <label for="cr">Cr</label>
+                                    <input type="number" id="cr" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="ni">Ni</label>
+                                    <input type="number" id="ni" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="al">Al</label>
+                                    <input type="number" id="al" step="0.01">
+                                </div>
+                               
+                                <div class="form-group">
+                                    <label for="cu">Cu</label>
+                                    <input type="number" id="cu" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sn">Sn</label>
+                                    <input type="number" id="sn" step="0.01">
+                                </div>
+
+                                 <div class="form-group">
+                                    <label for="mo">Mo</label>
+                                    <input type="number" id="mo" step="0.01"></label>
+                                </div>
+                            </div>
+
+                            <!-- Materials Section -->
+                            <div class="form-subsection">
+                                <h2>Materials</h2>
+                                
+                                <div class="form-group">
+                                    <label for="cac2_s">CaC2/S</label>
+                                    <input type="number" id="cac2_s" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="fesi_sh">FeSi-Sh</label>
+                                    <input type="number" id="fesi_sh" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="femn_sic">FeMn-SiC</label>
+                                    <input type="number" id="femn_sic" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cu_fecr">Cu-FeCr</label>
+                                    <input type="number" id="cu_fecr" step="0.01">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="carbon_steel">Carbon Steel</label>
+                                    <input type="text" id="carbon_steel">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button type="submit">
+                                <i class="lucide lucide-check"></i>
+                                Submit Data
+                            </button>
+                        </div>
+                        
+                        <div id="responseMessage" class="response-message"></div>
+                    </form>
+                </div>
+
+                <div class="table-section" data-aos="fade-up" data-aos-delay="200">
+                    <div class="table-header">
+                        <h2 style="text-align: center;">Previous Records</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="timeStudyTable">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Shift</th>
+                                    <th>Part Name</th>
+                                    <th>Heat Code</th>
+                                    <th>Grade</th>
+                                    <th>C</th>
+                                    <th>Si</th>
+                                    <th>Mn</th>
+                                    <th>P</th>
+                                    <th>S</th>
+                                    <th>Cr</th>
+                                    <th>Ni</th>
+                                    <th>Al</th>
+                                    <th>Cu</th>
+                                    <th>Sn</th>
+                                    <th>Mo</th>
+                                    <th>CaC2/S</th>
+                                    <th>FeSi-Sh</th>
+                                    <th>FeMn-SiC</th>
+                                    <th>Cu-FeCr</th>
+                                    <th>Carbon Steel</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timeStudyBody">
+                                <tr><td colspan="21" style="text-align:center; padding:10px;">No records found</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="/Time Study/app.js"></script>
+    <script>
+         document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Your existing code
+      updateHourlyTimestamp();
+      setInterval(updateHourlyTimestamp, 60000);
+    });
+        // Initialize AOS animations
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out-quad',
+            once: true,
+            offset: 50
+        });
+
+        // Preloader
+        window.addEventListener('load', function() {
+            const loader = document.querySelector('.loader');
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
