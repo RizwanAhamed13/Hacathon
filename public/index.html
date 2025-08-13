@@ -273,7 +273,7 @@
       height: 100px;
       width: 100px;
       z-index: 2;
-      background: url('../bgsakthi.png') no-repeat center center/contain;
+      background: url('bgsakthi.png') no-repeat center center/contain;
       animation: heartbeat 1.5s infinite cubic-bezier(.4,0,.6,1);
     }
 
@@ -402,7 +402,7 @@
   <div class="login-container">
     <div class="login-card" data-aos="zoom-in" data-aos-duration="800">
       <div class="login-header">
-        <img src="../bgsakthi.png" alt="FQCR Logo" class="login-logo">
+        <img src="bgsakthi.png" alt="FQCR Logo" class="login-logo">
         <h1 class="login-title">Employee Login</h1>
         <p class="login-subtitle">Access quality control records with your credentials</p>
       </div>
@@ -504,6 +504,7 @@
         if (res.ok) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('role', data.role);
+          localStorage.setItem('userRole', data.role);
           
           // Show success message
           showAlert('success', 'Login successful! Redirecting...');
@@ -511,11 +512,13 @@
           // Redirect after delay
           setTimeout(() => {
             if (data.role === 'admin') {
-              window.location.href = './main.html';
+              window.location.href = '/main.html';
+            } else if (['bay_manager','maintenance_incharge','safety_incharge'].includes(data.role)) {
+              window.location.href = '/LOTO Work Permit/index.html';
             } else {
-              window.location.href = './auth/user.html';
+              window.location.href = '/auth/user.html';
             }
-          }, 1500);
+          }, 800);
         } else {
           errorDiv.textContent = data.error || 'Login failed';
           showAlert('error', data.error || 'Login failed');

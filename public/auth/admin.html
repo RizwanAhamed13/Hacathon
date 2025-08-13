@@ -354,8 +354,15 @@
     });
 
     const token = localStorage.getItem('token');
-    if (!token || localStorage.getItem('role') !== 'admin') {
+    const role = localStorage.getItem('role');
+    if (!token) {
       window.location.href = '/auth/login.html';
+    } else if (role !== 'admin') {
+      if (['bay_manager','maintenance_incharge','safety_incharge'].includes(role)) {
+        window.location.href = '/LOTO Work Permit/index.html';
+      } else {
+        window.location.href = '/auth/user.html';
+      }
     }
 
     // List of forms (update as needed)
@@ -411,7 +418,7 @@
                 <label class="form-checkbox">
                   <input type="checkbox" value="${form}" 
                     ${user.form_access && user.form_access.split(',').includes(form) ? 'checked' : ''}>
-                  <a href="/public/${formPaths[form] || 'index.html'}" target="_blank" style="text-decoration:none;color:inherit;">${form}</a>
+                  <a href="/${formPaths[form] || 'index.html'}" target="_blank" style="text-decoration:none;color:inherit;">${form}</a>
                 </label>
               `).join('');
               userDiv.innerHTML = `

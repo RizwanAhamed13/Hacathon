@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOTO Work Permit System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    .header {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid #334155;
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+    
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    .hero-section {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    
+    .page-title {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-subtitle {
+      color: #94a3b8;
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .workflow-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .workflow-step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      background: rgba(71, 85, 105, 0.3);
+      border: 1px solid #475569;
+      font-size: 0.9rem;
+      font-weight: 500;
+      min-width: 140px;
+      justify-content: center;
+    }
+    
+    .workflow-step.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: #3b82f6;
+      color: #60a5fa;
+    }
+    
+    .workflow-arrow {
+      color: #64748b;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .stats-section {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .stats-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 12px;
+      border: 1px solid #374151;
+      transition: transform 0.2s ease;
+    }
+    
+    .stat-item:hover {
+      transform: translateY(-2px);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .pending { color: #fbbf24; }
+    .approved { color: #10b981; }
+    .rejected { color: #ef4444; }
+    .total { color: #8b5cf6; }
+    
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .action-card {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 20px 20px 0 0;
+    }
+    
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: #3b82f6;
+    }
+    
+    .action-card.hidden {
+      display: none;
+    }
+    
+    .card-icon {
+      width: 4rem;
+      height: 4rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: white;
+    }
+    
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 0.75rem;
+    }
+    
+    .card-description {
+      color: #94a3b8;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .card-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    
+    .card-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #cbd5e1;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .card-features li i {
+      color: #22c55e;
+      font-size: 0.8rem;
+    }
+    
+    .card-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      width: 100%;
+    }
+    
+    .card-action:hover {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+    
+    .card-action.secondary {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+    
+    .card-action.secondary:hover {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+    }
+    
+    .card-action.success {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+    
+    .card-action.success:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+    
+    .role-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid #3b82f6;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .welcome-message {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid #3b82f6;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .welcome-message h3 {
+      color: #60a5fa;
+      margin-bottom: 0.5rem;
+    }
+    
+    .welcome-message p {
+      color: #94a3b8;
+    }
+    
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #94a3b8;
+    }
+    
+    .spinner {
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid #374151;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.75rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .toast-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+    
+    .toast {
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease-out;
+      margin-bottom: 0.5rem;
+    }
+    
+    .toast-success { border-left: 4px solid #10b981; }
+    .toast-error { border-left: 4px solid #ef4444; }
+    .toast-info { border-left: 4px solid #8b5cf6; }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @media (max-width: 768px) {
+      .container { padding: 2rem 1rem; }
+      .actions-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .page-title { font-size: 2rem; }
+      .workflow-display { gap: 0.5rem; }
+      .workflow-arrow { display: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .workflow-step { min-width: auto; padding: 0.5rem 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i data-lucide="shield-check"></i>
+        LOTO Work Permit System
+      </div>
+      <div class="user-info">
+        <button onclick="window.location.href='../../main.html'" class="nav-btn">
+          <i data-lucide="home"></i>
+          Home
+        </button>
+        <span id="user-role">Loading...</span>
+        <i data-lucide="user"></i>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="hero-section">
+      <h1 class="page-title">LOTO Work Permit System</h1>
+      <p class="page-subtitle">Lockout/Tagout Work Permit Management with Complete Workflow Control</p>
+      
+      <div class="welcome-message" id="welcome-message">
+        <h3 id="welcome-title">Welcome to LOTO System</h3>
+        <p id="welcome-text">Loading your dashboard...</p>
+      </div>
+    </div>
+    
+    <!-- Workflow Steps -->
+    <div class="workflow-display">
+      <div class="workflow-step">
+        <i data-lucide="user-check"></i>
+        Bay Manager
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">
+        <i data-lucide="wrench"></i>
+        Maintenance Incharge
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">
+        <i data-lucide="shield"></i>
+        Safety Incharge
+      </div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">
+        <i data-lucide="check-circle"></i>
+        Approved
+      </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="stats-section">
+      <h2 class="stats-title">Live LOTO Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number total" id="total-permits">0</div>
+          <div class="stat-label">Total Permits</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number pending" id="pending-permits">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number approved" id="approved-permits">0</div>
+          <div class="stat-label">Approved</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number rejected" id="rejected-permits">0</div>
+          <div class="stat-label">Rejected</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="actions-grid">
+      <!-- Create LOTO Permit Card -->
+      <div class="action-card hidden" id="create-card">
+        <div class="role-badge">Authorized Users</div>
+        <div class="card-icon">
+          <i data-lucide="file-plus"></i>
+        </div>
+        <h3 class="card-title">Create LOTO Permit</h3>
+        <p class="card-description">Submit a new Lockout/Tagout work permit with comprehensive safety checkpoints and location details.</p>
+        <ul class="card-features">
+          <li><i data-lucide="check"></i> Basic information entry</li>
+          <li><i data-lucide="check"></i> Location and shift details</li>
+          <li><i data-lucide="check"></i> Safety checkpoint validation</li>
+          <li><i data-lucide="check"></i> Emergency switch controls</li>
+        </ul>
+        <a href="./loto-form.html" class="card-action">
+          <i data-lucide="plus"></i>
+          Create New Permit
+        </a>
+      </div>
+
+      <!-- Manager Dashboard Card -->
+      <div class="action-card hidden" id="manager-card">
+        <div class="role-badge">Managers Only</div>
+        <div class="card-icon">
+          <i data-lucide="clipboard-check"></i>
+        </div>
+        <h3 class="card-title">Manager Dashboard</h3>
+        <p class="card-description">Approve or reject LOTO permits based on your role in the approval workflow. View permits pending your action.</p>
+        <ul class="card-features">
+          <li><i data-lucide="check"></i> Role-based permit filtering</li>
+          <li><i data-lucide="check"></i> Quick approve/reject actions</li>
+          <li><i data-lucide="check"></i> Real-time notifications</li>
+          <li><i data-lucide="check"></i> Approval status tracking</li>
+        </ul>
+        <a href="LOTO%20Work%20Permit/manager-dashboard.html" class="card-action secondary">
+          <i data-lucide="clipboard-check"></i>
+          Manage Approvals
+        </a>
+      </div>
+
+      <!-- Tracking Dashboard Card -->
+      <div class="action-card hidden" id="tracking-card">
+        <div class="role-badge">Admin Only</div>
+        <div class="card-icon">
+          <i data-lucide="activity"></i>
+        </div>
+        <h3 class="card-title">Tracking Dashboard</h3>
+        <p class="card-description">Complete overview of all LOTO permits with advanced filtering, reporting capabilities, and workflow tracking.</p>
+        <ul class="card-features">
+          <li><i data-lucide="check"></i> All permits overview</li>
+          <li><i data-lucide="check"></i> Advanced filtering options</li>
+          <li><i data-lucide="check"></i> PDF export functionality</li>
+          <li><i data-lucide="check"></i> Workflow progress tracking</li>
+        </ul>
+        <a href="./tracking-dashboard.html" class="card-action success">
+          <i data-lucide="activity"></i>
+          View All Permits
+        </a>
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="action-card" id="quick-actions-card">
+        <div class="role-badge">All Users</div>
+        <div class="card-icon">
+          <i data-lucide="zap"></i>
+        </div>
+        <h3 class="card-title">Quick Actions</h3>
+        <p class="card-description">Quick access to essential LOTO system functions and information.</p>
+        <ul class="card-features">
+          <li><i data-lucide="check"></i> System status check</li>
+          <li><i data-lucide="check"></i> Recent activity</li>
+          <li><i data-lucide="check"></i> Help and documentation</li>
+          <li><i data-lucide="check"></i> Contact support</li>
+        </ul>
+        <button onclick="refreshData()" class="card-action">
+          <i data-lucide="refresh-cw"></i>
+          Refresh Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script>
+  const API_BASE = 'http://localhost:3000';
+  class LOTODashboard {
+    constructor() {
+      this.userRole = null;
+      this.userForms = [];
+      this.healthStatus = null;
+      this.init();
+    }
+
+    async init() {
+      lucide.createIcons();
+      await this.checkHealth();
+      await this.getUserInfo();
+      await this.loadStatistics();
+      setInterval(() => {
+        this.loadStatistics(false);
+      }, 30000);
+    }
+
+    async checkHealth() {
+      try {
+        const res = await fetch(`${API_BASE}/api/health`);
+        if (res.ok) {
+          const data = await res.json();
+          this.healthStatus = data.status === 'OK' ? 'Healthy' : 'Unhealthy';
+          this.showToast(`API Health: ${data.status} (${data.message})`, 'info');
+        } else {
+          this.healthStatus = 'Unhealthy';
+          this.showToast('API Health: Unhealthy', 'error');
+        }
+      } catch (e) {
+        this.healthStatus = 'Unreachable';
+        this.showToast('API Health: Unreachable', 'error');
+      }
+    }
+
+    async getUserInfo() {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '../../auth/login.html';
+          return;
+        }
+
+        // Get user role from token
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        this.userRole = payload.role;
+        
+        // Update UI with user role
+        const roleDisplay = this.userRole.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+        document.getElementById('user-role').textContent = roleDisplay;
+        
+        // Get user's assigned forms
+        if (this.userRole === 'user') {
+          const response = await fetch(`${API_BASE}/auth/user/forms`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.ok) {
+            this.userForms = await response.json();
+          }
+        }
+        
+        // Show appropriate cards and welcome message
+        this.updateWelcomeMessage();
+        this.showRoleSpecificCards();
+        
+      } catch (error) {
+        console.error('Error getting user info:', error);
+        this.showToast('Error loading user information', 'error');
+      }
+    }
+
+    updateWelcomeMessage() {
+      const welcomeTitle = document.getElementById('welcome-title');
+      const welcomeText = document.getElementById('welcome-text');
+      
+      if (this.userRole === 'admin') {
+        welcomeTitle.textContent = 'Welcome, Administrator';
+        welcomeText.textContent = 'You have full access to manage and track all LOTO permits in the system.';
+      } else if (['bay_manager', 'maintenance_incharge', 'safety_incharge'].includes(this.userRole)) {
+        welcomeTitle.textContent = `Welcome, ${this.userRole.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+        welcomeText.textContent = 'Review and approve LOTO permits that require your authorization.';
+      } else if (this.userRole === 'user') {
+        const hasLOTOAccess = this.userForms.includes('LOTO Work Permit');
+        welcomeTitle.textContent = 'Welcome to LOTO System';
+        welcomeText.textContent = hasLOTOAccess ? 
+          'You have access to create LOTO work permits.' : 
+          'Contact your administrator for LOTO access permissions.';
+      }
+    }
+
+    showRoleSpecificCards() {
+      const createCard = document.getElementById('create-card');
+      const managerCard = document.getElementById('manager-card');
+      const trackingCard = document.getElementById('tracking-card');
+      
+      // Show create card for users with LOTO access or admin
+      if (this.userRole === 'admin' || 
+         (this.userRole === 'user' && this.userForms.includes('LOTO Work Permit'))) {
+        createCard.classList.remove('hidden');
+      }
+      
+      // Show manager card for LOTO managers
+      if (['bay_manager', 'maintenance_incharge', 'safety_incharge'].includes(this.userRole)) {
+        managerCard.classList.remove('hidden');
+      }
+      
+      // Show tracking card for admin only
+      if (this.userRole === 'admin') {
+        trackingCard.classList.remove('hidden');
+      }
+    }
+
+    async loadStatistics(showLoading = true) {
+      try {
+        if (showLoading) {
+          this.showLoadingStats();
+        }
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE}/api/loto-work-permit`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const permits = await response.json();
+          if (Array.isArray(permits)) {
+            this.updateStatistics(permits);
+          } else {
+            this.showToast('API returned unexpected data format', 'error');
+            this.updateStatistics([]);
+          }
+        } else {
+          let msg = `Failed to load permits: ${response.status} ${response.statusText}`;
+          this.showToast(msg, 'error');
+          this.updateStatistics([]);
+        }
+      } catch (error) {
+        this.showToast('Error loading statistics: ' + error.message, 'error');
+        this.updateStatistics([]);
+      }
+    }
+
+    showLoadingStats() {
+      ['total-permits', 'pending-permits', 'approved-permits', 'rejected-permits'].forEach(id => {
+        document.getElementById(id).innerHTML = '<div class="spinner"></div>';
+      });
+    }
+
+    updateStatistics(permits) {
+      const stats = {
+        total: permits.length,
+        pending: 0,
+        approved: 0,
+        rejected: 0
+      };
+      
+      permits.forEach(permit => {
+        if (permit.status === 'APPROVED') {
+          stats.approved++;
+        } else if (permit.status === 'REJECTED') {
+          stats.rejected++;
+        } else {
+          stats.pending++;
+        }
+      });
+      
+      document.getElementById('total-permits').textContent = stats.total;
+      document.getElementById('pending-permits').textContent = stats.pending;
+      document.getElementById('approved-permits').textContent = stats.approved;
+      document.getElementById('rejected-permits').textContent = stats.rejected;
+    }
+
+    showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const iconMap = {
+        success: 'check-circle',
+        error: 'x-circle',
+        info: 'info'
+      };
+      
+      toast.innerHTML = `
+        <i data-lucide="${iconMap[type]}"></i>
+        <span>${message}</span>
+      `;
+      
+      toastContainer.appendChild(toast);
+      lucide.createIcons();
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 5000);
+    }
+  }
+
+  // Global functions for HTML onclick handlers
+  function refreshData() {
+    dashboard.loadStatistics(true);
+    dashboard.showToast('Data refreshed successfully', 'success');
+  }
+
+  // Initialize dashboard when page loads
+  let dashboard;
+  document.addEventListener('DOMContentLoaded', () => {
+    dashboard = new LOTODashboard();
+  });
+  </script>
+</body>
+</html>

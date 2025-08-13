@@ -282,7 +282,7 @@
           data.forEach(form => {
             const formCard = document.createElement('a');
             formCard.className = 'form-card';
-            formCard.href = `/public/${formPaths[form] || 'index.html'}`;
+            formCard.href = `/${formPaths[form] || 'index.html'}`;
             formCard.innerHTML = `
               <i class="ph ${formIcons[form] || 'ph-file-text'} form-icon"></i>
               <div class="form-name">${form}</div>

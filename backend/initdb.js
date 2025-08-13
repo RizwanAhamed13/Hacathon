@@ -105,42 +105,10 @@ async function initializeDatabase() {
     $$ LANGUAGE plpgsql;
   `);
 
-  // Triggers for all main tables
-  const auditTables = [
-    'qc_register',
-    'inspection_register',
-    'tensile_test_report',
-    'microstructure_analysis',
-    'time_study_process',
-    'online_micro_coupon_inspection',
-    'master_data',
-    'recently_used_products',
-    'Hardness Test Record',
-    'CARBON - SULPHUR (LECO) ANALYSIS REGISTER',
-    'QF 07 FBQ - 02',
-    'QF 07 FBQ - 03',
-    'IMPACT TEST REPORT',
-    'REJECTION ANALYSIS REGISTER',
-    'INSPECTION RESULT REPORT',
-    'ERROR PROOF VERIFICATION CHECK LIST - FDY'
-  ];
-  for (const table of auditTables) {
-    const triggerName = table.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() + '_audit';
-    await pool.query(`
-      DO $$
-      BEGIN
-        IF NOT EXISTS (
-          SELECT 1 FROM pg_trigger WHERE tgname = '${triggerName}'
-        ) THEN
-          EXECUTE 'CREATE TRIGGER ${triggerName}
-            AFTER INSERT OR UPDATE OR DELETE ON "${table}"
-            FOR EACH ROW EXECUTE FUNCTION log_changes();';
-        END IF;
-      END
-      $$;
-    `);
-  }
-  // --- END AUDIT LOG SYSTEM ---
+  // --- END OF CORE AUDIT LOG SETUP ---
+  
+  // --- CREATE ALL TABLES FIRST ---
+  
   // master_data
   await pool.query(`
     CREATE TABLE IF NOT EXISTS master_data (
@@ -294,94 +262,93 @@ async function initializeDatabase() {
   `);
 
   // QF 07 FBQ - 03
-await pool.query(`
-  CREATE TABLE IF NOT EXISTS "QF 07 FBQ - 03" (
-    id SERIAL PRIMARY KEY,
-    component_in_production VARCHAR(20) REFERENCES master_data(product_code) NOT NULL,
-    inoculation_flow_rate_rpm DECIMAL,
-    inoculation_flow_rate_gms DECIMAL,
-    air_pressure DECIMAL CHECK (air_pressure >= 4.0),
-    inject_pressure DECIMAL CHECK (inject_pressure <= 2.0),
-    feed_pipe_condition TEXT,
-    air_line_water_drainage BOOLEAN,
-    hopper_cleaning BOOLEAN,
-    inoculant_powder_size DECIMAL,
-    inoculant_powder_moisture DECIMAL,
-    is_new_bag BOOLEAN DEFAULT FALSE,
-    gauge_test DECIMAL,
-    micro_structure VARCHAR(100) DEFAULT 'Inoculation System Checks',
-    macro_structure VARCHAR(100) DEFAULT 'Pre-Process'
-  );
-`);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS "QF 07 FBQ - 03" (
+      id SERIAL PRIMARY KEY,
+      component_in_production VARCHAR(20) REFERENCES master_data(product_code) NOT NULL,
+      inoculation_flow_rate_rpm DECIMAL,
+      inoculation_flow_rate_gms DECIMAL,
+      air_pressure DECIMAL CHECK (air_pressure >= 4.0),
+      inject_pressure DECIMAL CHECK (inject_pressure <= 2.0),
+      feed_pipe_condition TEXT,
+      air_line_water_drainage BOOLEAN,
+      hopper_cleaning BOOLEAN,
+      inoculant_powder_size DECIMAL,
+      inoculant_powder_moisture DECIMAL,
+      is_new_bag BOOLEAN DEFAULT FALSE,
+      gauge_test DECIMAL,
+      micro_structure VARCHAR(100) DEFAULT 'Inoculation System Checks',
+      macro_structure VARCHAR(100) DEFAULT 'Pre-Process'
+    );
+  `);
 
   // recently_used_products
-await pool.query(`
-  CREATE TABLE IF NOT EXISTS recently_used_products (
-    user_id VARCHAR(50),
-    product_code VARCHAR(20) REFERENCES master_data(product_code),
-    last_used TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, product_code)
-  );
-`);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS recently_used_products (
+      user_id VARCHAR(50),
+      product_code VARCHAR(20) REFERENCES master_data(product_code),
+      last_used TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (user_id, product_code)
+    );
+  `);
 
   // time_study_process
-await pool.query(`
-  CREATE TABLE IF NOT EXISTS time_study_process (
-    id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    shift VARCHAR(10),
-    part_name VARCHAR(100) NOT NULL,
-    heat_code VARCHAR(50) NOT NULL,
-    grade VARCHAR(50) NOT NULL,
-    c FLOAT,
-    si FLOAT,
-    mn FLOAT,
-    p FLOAT,
-    s FLOAT,
-    cr FLOAT,
-    ni FLOAT,
-    al FLOAT,
-    cu FLOAT,
-    sn FLOAT,
-    mo FLOAT,
-    cac2_s FLOAT,
-    fesi_sh FLOAT,
-    femn_sic FLOAT,
-    cu_fecr FLOAT,
-    carbon_steel VARCHAR(50),
-    micro_structure VARCHAR(100) DEFAULT 'Melting/Pouring Control',
-    macro_structure VARCHAR(100) DEFAULT 'In-Process Documents',
-    mn1 FLOAT,
-    p1 FLOAT,
-    s1 FLOAT,
-    mg1 FLOAT,
-    f_l1 FLOAT,
-    cu1 FLOAT,
-    cr1 FLOAT,
-    c2 FLOAT,
-    si2 FLOAT,
-    mn2 FLOAT,
-    s2 FLOAT,
-    cr2 FLOAT,
-    cu2 FLOAT,
-    sn2 FLOAT,
-    pouring_time TIME,
-    pouring_temp FLOAT,
-    pp_code VARCHAR(20),
-    fc_no_heat_no VARCHAR(50),
-    mg_kgs FLOAT,
-    res_mg FLOAT,
-    converter_percent FLOAT,
-    rec_mg_percent FLOAT,
-    stream_innoculat FLOAT,
-    p_time_sec FLOAT,
-    treatment_no VARCHAR(20),
-    con_no VARCHAR(20),
-    tapping_time TIME,
-    corrective_addition_kgs FLOAT
-  );
-`);
-  // ...existing code...
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS time_study_process (
+      id SERIAL PRIMARY KEY,
+      timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      shift VARCHAR(10),
+      part_name VARCHAR(100) NOT NULL,
+      heat_code VARCHAR(50) NOT NULL,
+      grade VARCHAR(50) NOT NULL,
+      c FLOAT,
+      si FLOAT,
+      mn FLOAT,
+      p FLOAT,
+      s FLOAT,
+      cr FLOAT,
+      ni FLOAT,
+      al FLOAT,
+      cu FLOAT,
+      sn FLOAT,
+      mo FLOAT,
+      cac2_s FLOAT,
+      fesi_sh FLOAT,
+      femn_sic FLOAT,
+      cu_fecr FLOAT,
+      carbon_steel VARCHAR(50),
+      micro_structure VARCHAR(100) DEFAULT 'Melting/Pouring Control',
+      macro_structure VARCHAR(100) DEFAULT 'In-Process Documents',
+      mn1 FLOAT,
+      p1 FLOAT,
+      s1 FLOAT,
+      mg1 FLOAT,
+      f_l1 FLOAT,
+      cu1 FLOAT,
+      cr1 FLOAT,
+      c2 FLOAT,
+      si2 FLOAT,
+      mn2 FLOAT,
+      s2 FLOAT,
+      cr2 FLOAT,
+      cu2 FLOAT,
+      sn2 FLOAT,
+      pouring_time TIME,
+      pouring_temp FLOAT,
+      pp_code VARCHAR(20),
+      fc_no_heat_no VARCHAR(50),
+      mg_kgs FLOAT,
+      res_mg FLOAT,
+      converter_percent FLOAT,
+      rec_mg_percent FLOAT,
+      stream_innoculat FLOAT,
+      p_time_sec FLOAT,
+      treatment_no VARCHAR(20),
+      con_no VARCHAR(20),
+      tapping_time TIME,
+      corrective_addition_kgs FLOAT
+    );
+  `);
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS online_micro_coupon_inspection (
@@ -397,7 +364,7 @@ await pool.query(`
     );
   `);
 
-    // IMPACT TEST REPORT
+  // IMPACT TEST REPORT
   await pool.query(`
     CREATE TABLE IF NOT EXISTS "IMPACT TEST REPORT" (
       id SERIAL PRIMARY KEY,
@@ -468,7 +435,7 @@ await pool.query(`
     );
   `);
 
-// ERROR PROOF VERIFICATION CHECK LIST - FDY
+  // ERROR PROOF VERIFICATION CHECK LIST - FDY
   await pool.query(`
     CREATE TABLE IF NOT EXISTS "ERROR PROOF VERIFICATION CHECK LIST - FDY" (
       id SERIAL PRIMARY KEY,
@@ -532,7 +499,146 @@ await pool.query(`
     );
   `);
 
-  console.log('Database initialized: All tables are ensured.');
+  // LOTO Work Permit
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS "LOTO Work Permit" (
+      id SERIAL PRIMARY KEY,
+      bd_slip_no VARCHAR(50),
+      permit_date DATE NOT NULL,
+      permit_issuing_time TIME,
+      permit_closing_time TIME,
+      shift VARCHAR(20),
+      plant VARCHAR(100),
+      department VARCHAR(100),
+      bay_no VARCHAR(50),
+      line_name VARCHAR(100),
+      machine_no VARCHAR(50),
+
+      -- LOTO Check Points with Shift1, Shift2, Shift3
+      presence_of_bay_manager_shift1 BOOLEAN,
+      presence_of_bay_manager_shift2 BOOLEAN,
+      presence_of_bay_manager_shift3 BOOLEAN,
+
+      presence_of_maintenance_incharge_shift1 BOOLEAN,
+      presence_of_maintenance_incharge_shift2 BOOLEAN,
+      presence_of_maintenance_incharge_shift3 BOOLEAN,
+
+      no_of_persons_working_in_machine_shift1 INT,
+      no_of_persons_working_in_machine_shift2 INT,
+      no_of_persons_working_in_machine_shift3 INT,
+
+      emergency_switch_operator_panel_off_condition_shift1 BOOLEAN,
+      emergency_switch_operator_panel_off_condition_shift2 BOOLEAN,
+      emergency_switch_operator_panel_off_condition_shift3 BOOLEAN,
+
+      emergency_switch_cycle_start_panel_off_condition_shift1 BOOLEAN,
+      emergency_switch_cycle_start_panel_off_condition_shift2 BOOLEAN,
+      emergency_switch_cycle_start_panel_off_condition_shift3 BOOLEAN,
+
+      emergency_switch_conveyor_panel_off_condition_shift1 BOOLEAN,
+      emergency_switch_conveyor_panel_off_condition_shift2 BOOLEAN,
+      emergency_switch_conveyor_panel_off_condition_shift3 BOOLEAN,
+
+      mcb_off_lock_condition_shift1 BOOLEAN,
+      mcb_off_lock_condition_shift2 BOOLEAN,
+      mcb_off_lock_condition_shift3 BOOLEAN,
+
+      air_line_close_condition_shift1 BOOLEAN,
+      air_line_close_condition_shift2 BOOLEAN,
+      air_line_close_condition_shift3 BOOLEAN,
+
+      men_at_work_board_mcb_panel_shift1 BOOLEAN,
+      men_at_work_board_mcb_panel_shift2 BOOLEAN,
+      men_at_work_board_mcb_panel_shift3 BOOLEAN,
+
+      men_at_work_do_not_operate_machine_board_operator_panel_shift1 BOOLEAN,
+      men_at_work_do_not_operate_machine_board_operator_panel_shift2 BOOLEAN,
+      men_at_work_do_not_operate_machine_board_operator_panel_shift3 BOOLEAN,
+
+      men_at_work_board_air_valve_shift1 BOOLEAN,
+      men_at_work_board_air_valve_shift2 BOOLEAN,
+      men_at_work_board_air_valve_shift3 BOOLEAN,
+    
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+  `);
+
+  // LOTO-only approval workflow columns (idempotent upgrade)
+  await pool.query(`
+    ALTER TABLE "LOTO Work Permit"
+      ADD COLUMN IF NOT EXISTS status VARCHAR(30) NOT NULL DEFAULT 'PENDING_BAY',
+      ADD COLUMN IF NOT EXISTS current_approver_role VARCHAR(50) DEFAULT 'bay_manager',
+      ADD COLUMN IF NOT EXISTS bay_manager_approved_by TEXT,
+      ADD COLUMN IF NOT EXISTS bay_manager_approved_at TIMESTAMPTZ,
+      ADD COLUMN IF NOT EXISTS maintenance_incharge_approved_by TEXT,
+      ADD COLUMN IF NOT EXISTS maintenance_incharge_approved_at TIMESTAMPTZ,
+      ADD COLUMN IF NOT EXISTS safety_incharge_approved_by TEXT,
+      ADD COLUMN IF NOT EXISTS safety_incharge_approved_at TIMESTAMPTZ,
+      ADD COLUMN IF NOT EXISTS rejected_by TEXT,
+      ADD COLUMN IF NOT EXISTS rejected_at TIMESTAMPTZ,
+      ADD COLUMN IF NOT EXISTS rejection_reason TEXT;
+  `);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_loto_status ON "LOTO Work Permit"(status);`);
+
+  // Users/auth table and seed manager logins
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      role VARCHAR(50) NOT NULL DEFAULT 'user',
+      form_access TEXT DEFAULT ''
+    );
+  `);
+
+  // Seed default manager users (username = role, password = '12345')
+  await pool.query(`
+    INSERT INTO users (username, password, role) VALUES
+      ('bay_manager', '12345', 'bay_manager'),
+      ('maintenance_incharge', '12345', 'maintenance_incharge'),
+      ('safety_incharge', '12345', 'safety_incharge')
+    ON CONFLICT (username) DO NOTHING;
+  `);
+
+  // --- NOW, CREATE TRIGGERS ONCE ALL TABLES EXIST ---
+  const auditTables = [
+    'qc_register',
+    'inspection_register',
+    'tensile_test_report',
+    'microstructure_analysis',
+    'time_study_process',
+    'online_micro_coupon_inspection',
+    'master_data',
+    'recently_used_products',
+    'Hardness Test Record',
+    'CARBON - SULPHUR (LECO) ANALYSIS REGISTER',
+    'QF 07 FBQ - 02',
+    'QF 07 FBQ - 03',
+    'IMPACT TEST REPORT',
+    'REJECTION ANALYSIS REGISTER',
+    'INSPECTION RESULT REPORT',
+    'ERROR PROOF VERIFICATION CHECK LIST - FDY',
+    'LOTO Work Permit'
+  ];
+  for (const table of auditTables) {
+    const triggerName = table.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() + '_audit';
+    await pool.query(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_trigger WHERE tgname = '${triggerName}'
+        ) THEN
+          EXECUTE 'CREATE TRIGGER ${triggerName}
+            AFTER INSERT OR UPDATE OR DELETE ON "${table}"
+            FOR EACH ROW EXECUTE FUNCTION log_changes();';
+        END IF;
+      END
+      $$;
+    `);
+  }
+
+
+  console.log('Database initialized: All tables and triggers are ensured.');
 }
 
 if (require.main === module) {
@@ -542,4 +648,3 @@ if (require.main === module) {
 }
 
 module.exports = initializeDatabase;
-
