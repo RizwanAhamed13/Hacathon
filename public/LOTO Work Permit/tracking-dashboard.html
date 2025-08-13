@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOTO Tracking Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #581c87 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    .header {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid #334155;
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #8b5cf6;
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .btn-export {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    
+    .btn-export:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .dashboard-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+    }
+    
+    .dashboard-subtitle {
+      color: #cbd5e1;
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    .filters-section {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      align-items: end;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .filter-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+    
+    .filter-input {
+      padding: 0.75rem;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #475569;
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+    }
+    
+    .filter-input:focus {
+      outline: none;
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    }
+    
+    .btn-filter {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .stat-card {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+    
+    .pending { color: #fbbf24; }
+    .approved { color: #10b981; }
+    .rejected { color: #ef4444; }
+    .total { color: #8b5cf6; }
+    
+    .permits-table-section {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 20px;
+      padding: 2rem;
+      overflow: hidden;
+    }
+    
+    .table-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #374151;
+    }
+    
+    .permits-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(15, 23, 42, 0.8);
+    }
+    
+    .permits-table th {
+      background: rgba(30, 41, 59, 0.9);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #f1f5f9;
+      border-bottom: 1px solid #374151;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .permits-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #374151;
+      color: #cbd5e1;
+    }
+    
+    .permits-table tr:hover {
+      background: rgba(30, 41, 59, 0.5);
+    }
+    
+    .status-badge {
+      padding: 0.375rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-block;
+    }
+    
+    .status-pending-bay { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+    .status-pending-maintenance { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .status-pending-safety { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+    .status-approved { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .status-rejected { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+    
+    .workflow-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    .workflow-step {
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      background: rgba(71, 85, 105, 0.3);
+      color: #94a3b8;
+    }
+    
+    .workflow-step.completed {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+    
+    .workflow-step.current {
+      background: rgba(139, 92, 246, 0.2);
+      color: #8b5cf6;
+    }
+    
+    .approval-timeline {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    
+    .approval-item {
+      margin-bottom: 0.25rem;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: #94a3b8;
+    }
+    
+    .spinner {
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid #374151;
+      border-top: 3px solid #8b5cf6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .toast-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+    
+    .toast {
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.3s ease-out;
+      margin-bottom: 0.5rem;
+    }
+    
+    .toast-success { border-left: 4px solid #10b981; }
+    .toast-error { border-left: 4px solid #ef4444; }
+    .toast-info { border-left: 4px solid #8b5cf6; }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .table-container { font-size: 0.875rem; }
+      .permits-table th, .permits-table td { padding: 0.75rem 0.5rem; }
+      .stats-overview { grid-template-columns: 1fr; }
+      .filters-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i data-lucide="activity"></i>
+        LOTO Tracking Dashboard
+      </div>
+      <div class="header-actions">
+        <button class="btn-export" onclick="exportToPDF()">
+          <i data-lucide="download"></i>
+          Export PDF
+        </button>
+        <button class="btn-export" onclick="refreshData()">
+          <i data-lucide="refresh-cw"></i>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1 class="dashboard-title">LOTO Work Permit Tracking</h1>
+    <p class="dashboard-subtitle">Complete overview of all LOTO permits with workflow tracking and approval status</p>
+    
+    <!-- Filters -->
+    <div class="filters-section">
+      <div class="filters-grid">
+        <div class="filter-group">
+          <label class="filter-label">Status</label>
+          <select id="status-filter" class="filter-input">
+            <option value="">All Statuses</option>
+            <option value="PENDING_BAY">Pending Bay Manager</option>
+            <option value="PENDING_MAINTENANCE">Pending Maintenance</option>
+            <option value="PENDING_SAFETY">Pending Safety</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Date From</label>
+          <input type="date" id="date-from" class="filter-input">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Date To</label>
+          <input type="date" id="date-to" class="filter-input">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Plant</label>
+          <input type="text" id="plant-filter" class="filter-input" placeholder="Plant name">
+        </div>
+        <div class="filter-group">
+          <button class="btn-filter" onclick="applyFilters()">
+            <i data-lucide="filter"></i>
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Statistics Overview -->
+    <div class="stats-overview">
+      <div class="stat-card">
+        <div class="stat-number total" id="total-permits">0</div>
+        <div class="stat-label">Total Permits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number pending" id="pending-permits">0</div>
+        <div class="stat-label">Pending Approval</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number approved" id="approved-permits">0</div>
+        <div class="stat-label">Approved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number rejected" id="rejected-permits">0</div>
+        <div class="stat-label">Rejected</div>
+      </div>
+    </div>
+
+    <!-- Permits Table -->
+    <div class="permits-table-section">
+      <div class="table-header">
+        <h2 class="section-title">All LOTO Work Permits</h2>
+      </div>
+      
+      <div class="table-container">
+        <table class="permits-table">
+          <thead>
+            <tr>
+              <th>Permit ID</th>
+              <th>BD Slip</th>
+              <th>Date</th>
+              <th>Plant/Dept</th>
+              <th>Line/Machine</th>
+              <th>Status</th>
+              <th>Workflow Progress</th>
+              <th>Approval Timeline</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="permits-table-body">
+            <tr>
+              <td colspan="9" class="loading">
+                <div class="spinner"></div>
+                Loading permits...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="tracking-dashboard.js"></script>
+</body>
+</html>

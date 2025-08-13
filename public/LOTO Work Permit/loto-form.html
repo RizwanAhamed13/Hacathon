@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOTO Work Permit Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    .header {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #334155;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3b82f6;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+    
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .page-subtitle {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .card {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .form-section {
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #3b82f6;
+      display: inline-block;
+    }
+    
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 640px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    label {
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    input, select, textarea {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      background: rgba(15, 23, 42, 0.9);
+    }
+    
+    .checkbox-group {
+      background: rgba(15, 23, 42, 0.3);
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    
+    .checkbox-title {
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+    
+    .shift-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .shift-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(30, 41, 59, 0.5);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #374151;
+    }
+    
+    .shift-item input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+    
+    .shift-item input[type="number"] {
+      width: 80px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.85rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-secondary {
+      background: rgba(71, 85, 105, 0.5);
+      color: #cbd5e1;
+      border: 1px solid #475569;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(71, 85, 105, 0.7);
+      border-color: #64748b;
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+    
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #475569;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #475569;
+      background: rgba(30, 41, 59, 0.3);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #475569;
+    }
+    
+    th {
+      background: rgba(15, 23, 42, 0.7);
+      font-weight: 600;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      position: sticky;
+      top: 0;
+    }
+    
+    td {
+      color: #e2e8f0;
+      font-size: 0.9rem;
+    }
+    
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .status-pending-bay {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+      border: 1px solid #f59e0b;
+    }
+    
+    .status-pending-maintenance {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid #ef4444;
+    }
+    
+    .status-pending-safety {
+      background: rgba(168, 85, 247, 0.2);
+      color: #a855f7;
+      border: 1px solid #8b5cf6;
+    }
+    
+    .status-approved {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+      border: 1px solid #16a34a;
+    }
+    
+    .status-rejected {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid #ef4444;
+    }
+    
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      color: #94a3b8;
+    }
+    
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #374151;
+      border-top: 2px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.75rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .toast {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      max-width: 400px;
+    }
+    
+    .toast.show {
+      transform: translateX(0);
+    }
+    
+    .toast-success {
+      border-color: #22c55e;
+    }
+    
+    .toast-error {
+      border-color: #ef4444;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: #64748b;
+    }
+    
+    .workflow-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem 0;
+      gap: 1rem;
+    }
+    
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: rgba(71, 85, 105, 0.3);
+      border: 1px solid #475569;
+      font-size: 0.85rem;
+    }
+    
+    .step.active {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: #3b82f6;
+      color: #60a5fa;
+    }
+    
+    .step.completed {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: #22c55e;
+      color: #4ade80;
+    }
+    
+    .arrow {
+      color: #64748b;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i data-lucide="shield-check"></i>
+        LOTO Work Permit System
+      </div>
+      <div class="user-info">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="tracking-dashboard-btn" class="nav-btn" onclick="window.location.href='tracking-dashboard.html'" style="display: none;">
+            <i data-lucide="activity"></i>
+            Tracking Dashboard
+          </button>
+          <button id="manager-dashboard-btn" class="nav-btn" onclick="window.location.href='manager-dashboard.html'" style="display: none;">
+            <i data-lucide="clipboard-check"></i>
+            Manager Dashboard
+          </button>
+          <button id="home-btn" class="nav-btn" onclick="window.location.href='index.html'" style="display: flex;">
+            <i data-lucide="home"></i>
+            LOTO Home
+          </button>
+          <span id="user-role">Loading...</span>
+          <i data-lucide="user"></i>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1 class="page-title">LOTO Work Permit</h1>
+    <p class="page-subtitle">Lockout/Tagout Work Permit Management with Approval Workflow</p>
+    
+    <!-- Workflow Steps -->
+    <div class="workflow-steps">
+      <div class="step" id="step-bay">
+        <i data-lucide="user-check"></i>
+        Bay Manager
+      </div>
+      <div class="arrow">→</div>
+      <div class="step" id="step-maintenance">
+        <i data-lucide="wrench"></i>
+        Maintenance Incharge
+      </div>
+      <div class="arrow">→</div>
+      <div class="step" id="step-safety">
+        <i data-lucide="shield"></i>
+        Safety Incharge
+      </div>
+      <div class="arrow">→</div>
+      <div class="step" id="step-approved">
+        <i data-lucide="check-circle"></i>
+        Approved
+      </div>
+    </div>
+
+    <!-- Create Form -->
+    <div class="card">
+      <form id="loto-form">
+        <div class="form-section">
+          <h2 class="section-title">Basic Information</h2>
+          <div class="grid grid-4">
+            <div class="form-group">
+              <label for="bd_slip_no">BD Slip No</label>
+              <input type="text" id="bd_slip_no" name="bd_slip_no" placeholder="Enter BD slip number">
+            </div>
+            <div class="form-group">
+              <label for="permit_date">Permit Date *</label>
+              <input type="date" id="permit_date" name="permit_date" required>
+            </div>
+            <div class="form-group">
+              <label for="permit_issuing_time">Issuing Time</label>
+              <input type="time" id="permit_issuing_time" name="permit_issuing_time">
+            </div>
+            <div class="form-group">
+              <label for="permit_closing_time">Closing Time</label>
+              <input type="time" id="permit_closing_time" name="permit_closing_time">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Location Details</h2>
+          <div class="grid grid-3">
+            <div class="form-group">
+              <label for="shift">Shift</label>
+              <select id="shift" name="shift">
+                <option value="">Select Shift</option>
+                <option value="A">Shift A</option>
+                <option value="B">Shift B</option>
+                <option value="C">Shift C</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="plant">Plant</label>
+              <input type="text" id="plant" name="plant" placeholder="Enter plant name">
+            </div>
+            <div class="form-group">
+              <label for="department">Department</label>
+              <input type="text" id="department" name="department" placeholder="Enter department">
+            </div>
+            <div class="form-group">
+              <label for="bay_no">Bay No</label>
+              <input type="text" id="bay_no" name="bay_no" placeholder="Enter bay number">
+            </div>
+            <div class="form-group">
+              <label for="line_name">Line Name</label>
+              <input type="text" id="line_name" name="line_name" placeholder="Enter line name">
+            </div>
+            <div class="form-group">
+              <label for="machine_no">Machine No</label>
+              <input type="text" id="machine_no" name="machine_no" placeholder="Enter machine number">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Safety Check Points</h2>
+          
+          <div class="grid grid-2">
+            <div class="checkbox-group">
+              <div class="checkbox-title">Presence of Bay Manager</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="presence_bay_s1" name="presence_of_bay_manager_shift1">
+                  <label for="presence_bay_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="presence_bay_s2" name="presence_of_bay_manager_shift2">
+                  <label for="presence_bay_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="presence_bay_s3" name="presence_of_bay_manager_shift3">
+                  <label for="presence_bay_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Presence of Maintenance Incharge</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="presence_maint_s1" name="presence_of_maintenance_incharge_shift1">
+                  <label for="presence_maint_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="presence_maint_s2" name="presence_of_maintenance_incharge_shift2">
+                  <label for="presence_maint_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="presence_maint_s3" name="presence_of_maintenance_incharge_shift3">
+                  <label for="presence_maint_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">No. of Persons Working in Machine</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <label for="persons_s1">Shift 1:</label>
+                  <input type="number" id="persons_s1" name="no_of_persons_working_in_machine_shift1" min="0" placeholder="0">
+                </div>
+                <div class="shift-item">
+                  <label for="persons_s2">Shift 2:</label>
+                  <input type="number" id="persons_s2" name="no_of_persons_working_in_machine_shift2" min="0" placeholder="0">
+                </div>
+                <div class="shift-item">
+                  <label for="persons_s3">Shift 3:</label>
+                  <input type="number" id="persons_s3" name="no_of_persons_working_in_machine_shift3" min="0" placeholder="0">
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Emergency Switch - Operator Panel OFF</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_op_s1" name="emergency_switch_operator_panel_off_condition_shift1">
+                  <label for="emg_op_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_op_s2" name="emergency_switch_operator_panel_off_condition_shift2">
+                  <label for="emg_op_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_op_s3" name="emergency_switch_operator_panel_off_condition_shift3">
+                  <label for="emg_op_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Emergency Switch - Cycle Start Panel OFF</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_cycle_s1" name="emergency_switch_cycle_start_panel_off_condition_shift1">
+                  <label for="emg_cycle_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_cycle_s2" name="emergency_switch_cycle_start_panel_off_condition_shift2">
+                  <label for="emg_cycle_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_cycle_s3" name="emergency_switch_cycle_start_panel_off_condition_shift3">
+                  <label for="emg_cycle_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Emergency Switch - Conveyor Panel OFF</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_conv_s1" name="emergency_switch_conveyor_panel_off_condition_shift1">
+                  <label for="emg_conv_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_conv_s2" name="emergency_switch_conveyor_panel_off_condition_shift2">
+                  <label for="emg_conv_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="emg_conv_s3" name="emergency_switch_conveyor_panel_off_condition_shift3">
+                  <label for="emg_conv_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">MCB OFF Lock</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="mcb_s1" name="mcb_off_lock_condition_shift1">
+                  <label for="mcb_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="mcb_s2" name="mcb_off_lock_condition_shift2">
+                  <label for="mcb_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="mcb_s3" name="mcb_off_lock_condition_shift3">
+                  <label for="mcb_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Air Line Close</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="air_s1" name="air_line_close_condition_shift1">
+                  <label for="air_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="air_s2" name="air_line_close_condition_shift2">
+                  <label for="air_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="air_s3" name="air_line_close_condition_shift3">
+                  <label for="air_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Men At Work Board - MCB Panel</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="work_mcb_s1" name="men_at_work_board_mcb_panel_shift1">
+                  <label for="work_mcb_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="work_mcb_s2" name="men_at_work_board_mcb_panel_shift2">
+                  <label for="work_mcb_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="work_mcb_s3" name="men_at_work_board_mcb_panel_shift3">
+                  <label for="work_mcb_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Do Not Operate Board - Operator Panel</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="not_operate_s1" name="men_at_work_do_not_operate_machine_board_operator_panel_shift1">
+                  <label for="not_operate_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="not_operate_s2" name="men_at_work_do_not_operate_machine_board_operator_panel_shift2">
+                  <label for="not_operate_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="not_operate_s3" name="men_at_work_do_not_operate_machine_board_operator_panel_shift3">
+                  <label for="not_operate_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="checkbox-group">
+              <div class="checkbox-title">Men At Work Board - Air Valve</div>
+              <div class="shift-controls">
+                <div class="shift-item">
+                  <input type="checkbox" id="work_air_s1" name="men_at_work_board_air_valve_shift1">
+                  <label for="work_air_s1">Shift 1</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="work_air_s2" name="men_at_work_board_air_valve_shift2">
+                  <label for="work_air_s2">Shift 2</label>
+                </div>
+                <div class="shift-item">
+                  <input type="checkbox" id="work_air_s3" name="men_at_work_board_air_valve_shift3">
+                  <label for="work_air_s3">Shift 3</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="send"></i>
+            Submit LOTO Permit
+          </button>
+          <button type="button" id="refresh" class="btn btn-secondary">
+            <i data-lucide="refresh-cw"></i>
+            Refresh Data
+          </button>
+          <button type="button" id="cancel-edit" class="btn btn-secondary" style="display:none">
+            <i data-lucide="x-circle"></i>
+            Cancel Edit
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Records Table -->
+    <div class="card">
+      <h2 class="section-title">LOTO Work Permits</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>BD Slip</th>
+              <th>Permit Date</th>
+              <th>Shift</th>
+              <th>Plant</th>
+              <th>Line/Machine</th>
+              <th>Status</th>
+              <th>Current Step</th>
+              <th>Actions</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="results-table-body">
+            <tr>
+              <td colspan="10" class="loading">
+                <div class="spinner"></div>
+                Loading permits...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

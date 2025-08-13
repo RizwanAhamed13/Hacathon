@@ -24,6 +24,7 @@ console.log('Initializing Express app...');
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const path = require('path');
 console.log('Express app initialized. PORT:', PORT);
 
 // ✅ Use express.json() BEFORE the routes
@@ -41,6 +42,17 @@ try {
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/auth/login.html'));
 });
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'LOTO API is running',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
+});
+
 console.log('Middlewares registered.');
 
 // ✅ CORS middleware (also before routes)
@@ -80,6 +92,7 @@ const carbonSulphurLecoAnalysisRegisterRouter = require('./carbonSulphurLecoAnal
 const errorProofVerificationChecklistFDYRouter = require('./errorProofVerificationChecklistFDYRoutes');
 const authRouter = require('./auth/authRoutes').router;
 const listUsersRouter = require('./admin/listUsersRoutes 2');
+const lotoWorkPermitRouter = require('./lotoWorkPermitRoutes');
 
 console.log('Registering routes...');
 try {
@@ -100,6 +113,7 @@ try {
   app.use('/', errorProofVerificationChecklistFDYRouter);
   app.use('/auth', authRouter);
   app.use('/admin', listUsersRouter);
+  app.use('/', lotoWorkPermitRouter);
   console.log('Routes registered.');
 } catch (err) {
   logError('Registering routes', err);
