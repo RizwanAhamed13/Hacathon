@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      font-family: 'Roboto', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .dashboard {
+      max-width: 500px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.2);
+      padding: 2rem 2.5rem;
+      text-align: center;
+    }
+    h2 {
+      color: #fcb69f;
+      margin-bottom: 2rem;
+    }
+    .forms {
+      margin-top: 1rem;
+    }
+    .form-link {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #fcb69f, #ffecd2);
+      color: #333;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .form-link:hover {
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Your Forms</h2>
+    <div id="forms" class="forms"></div>
+  </div>
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token || localStorage.getItem('role') !== 'user') {
+      window.location.href = '/auth/login.html';
+    }
+    async function fetchForms() {
+      const res = await fetch('http://localhost:3000/auth/user/forms', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      const data = await res.json();
+      const formsDiv = document.getElementById('forms');
+      formsDiv.innerHTML = '';
+      if (Array.isArray(data)) {
+        data.forEach(form => {
+          formsDiv.innerHTML += `<a class="form-link" href="/${form}/index.html">${form}</a>`;
+        });
+      }
+    }
+    fetchForms();
+  </script>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.2/src/css/ph.css">
+  <link href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-bg: #FAFAFA;
+      --primary-accent: #D2691E;
+      --accent-light: #f5e3d4;
+      --accent-fade: #F4A261;
+      --card-border: #ede5dc;
+      --text-dark: #222;
+      --text-mid: #666;
+      --shadow-main: 0 8px 32px rgba(210, 105, 30, 0.13), 0 2px 12px rgba(244, 162, 97, 0.09);
+      --shadow-deep: 0 6px 14px rgba(151, 97, 47, .09), 0 1px 6px rgba(244,162,97,.07);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --transition: cubic-bezier(.4,.9,.35,1);
+    }
+    
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+
+    html, body {
+      font-family: 'Poppins', 'Montserrat', sans-serif;
+      background: linear-gradient(rgba(249, 244, 248, 0.93), rgba(249, 244, 248, 0.92)), url('steel3.jpeg') center center/cover no-repeat;
+      color: var(--text-dark);
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+
+    .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6);
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6);
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6);
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .dashboard-card {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.28);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--primary-accent), var(--accent-fade));
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .dashboard-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--primary-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .user-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .user {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      background: rgba(255,255,255,0.25);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-deep);
+      transition: all 0.3s var(--transition);
+    }
+
+    .user:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(210, 105, 30, 0.15);
+    }
+
+    .user-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .username {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary-accent);
+    }
+
+    .forms-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+
+    .form-checkbox {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.4);
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .form-checkbox:hover {
+      background: rgba(255,255,255,0.6);
+    }
+
+    .form-checkbox input {
+      margin-right: 0.5rem;
+      accent-color: var(--primary-accent);
+    }
+
+    .save-btn {
+      align-self: flex-end;
+      padding: 0.8rem 1.8rem;
+      background: linear-gradient(135deg, var(--primary-accent), var(--accent-fade));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s var(--transition);
+      box-shadow: 0 4px 14px rgba(210, 105, 30, 0.2);
+      font-family: 'Montserrat', sans-serif;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .save-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(210, 105, 30, 0.25);
+    }
+
+    .save-btn:active {
+      transform: translateY(0);
+    }
+
+    .save-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .save-btn:hover::before {
+      left: 100%;
+    }
+
+    .message {
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+      font-weight: 600;
+      margin-top: auto;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .success {
+      background: rgba(67, 170, 139, 0.2);
+      color: #27ae60;
+      border: 1px solid rgba(67, 170, 139, 0.3);
+    }
+
+    .error {
+      background: rgba(230, 57, 70, 0.2);
+      color: #e74c3c;
+      border: 1px solid rgba(230, 57, 70, 0.3);
+    }
+
+    /* Scrollbar styling */
+    .user-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .user-list::-webkit-scrollbar-track {
+      background: rgba(210, 105, 30, 0.1);
+      border-radius: 10px;
+    }
+
+    .user-list::-webkit-scrollbar-thumb {
+      background: rgba(210, 105, 30, 0.3);
+      border-radius: 10px;
+    }
+
+    .user-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(210, 105, 30, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-card {
+        padding: 1.5rem;
+      }
+      
+      .forms-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .user-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .save-btn {
+        align-self: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles-background" id="particles-background"></div>
+
+  <div class="dashboard-card" data-aos="zoom-in" data-aos-duration="800">
+    <div class="dashboard-header">
+      <h1 class="dashboard-title">Admin Dashboard</h1>
+      <p>Manage user form access permissions</p>
+      <button id="goToIndexBtn" class="main-index-btn" style="display:inline-block;margin-top:1rem;padding:0.7rem 1.5rem;background:linear-gradient(135deg,#D2691E,#F4A261);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px rgba(210,105,30,0.12);transition:background 0.2s;border:none;cursor:pointer;">
+        <i class="ph ph-house" style="margin-right:0.5rem;"></i>Go to Main Index
+      </button>
+    </div>
+    <!-- Create User Panel -->
+    <div class="create-user" style="display:flex;flex-direction:column;gap:0.75rem;background:rgba(255,255,255,0.25);border:1px solid var(--card-border);border-radius:var(--radius-md);padding:1rem;margin-bottom:1rem;">
+      <div style="font-weight:700;color:var(--primary-accent);">Create New User</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 180px auto;gap:0.6rem;align-items:center;">
+        <input id="new-username" type="text" placeholder="Username" style="padding:0.6rem;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.75);">
+        <input id="new-password" type="password" placeholder="Password" style="padding:0.6rem;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.75);">
+        <select id="new-role" style="padding:0.6rem;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.9);">
+          <option value="user" selected>User</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button id="createUserBtn" class="save-btn" style="padding:0.6rem 1rem;min-width:120px;">
+          <i class="ph ph-user-plus"></i>
+          Create
+        </button>
+      </div>
+    </div>
+
+    <div id="user-list" class="user-list"></div>
+    <div id="message" class="message"></div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const goToIndexBtn = document.getElementById('goToIndexBtn');
+        if (goToIndexBtn) {
+          goToIndexBtn.addEventListener('click', function() {
+            window.location.href = '/main.html';
+          });
+        }
+      });
+    </script>
+  <script>
+    // Initialize AOS
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+
+    // Create particles
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+
+    const token = localStorage.getItem('token');
+    if (!token || localStorage.getItem('role') !== 'admin') {
+      window.location.href = '/auth/login.html';
+    }
+
+    // List of forms (update as needed)
+    // Map form names to actual directory paths
+    const formPaths = {
+      'Carbon Sulphur Leco Analysis Register': 'Carbon Sulphur Leco Analysis Register/index.html',
+      'Error Proof Verification Checklist FDY': 'Error Proof Verification Checklist FDY/index.html',
+      'Hardness Test Record': 'Hardness Test Record/index.html',
+      'Impact Test Report': 'Impact Test Report/index.html',
+      'Inspection Register': 'Inspection Register/index.html',
+      'Inspection Result Report': 'Inspection Result Report/index.html',
+      'Microstructure Analysis': 'Microstructure Analysis/index.html',
+      'Online Micro Coupon': 'Online Micro Coupon/index.html',
+      'QC Register': 'QC Register/index.html',
+      'Rejection Analysis Register': 'Rejection Analysis Register/index.html',
+      'Tensile Test Report': 'Tensile Test Report/index.html',
+      'Time Study': 'Time Study/index.html',
+      'MSI 90': 'MSI 90/fbq02.html',
+      'MSI 90 Incolation': 'msi 90 incolation/fbq03.html'
+    };
+    const forms = [
+      'Carbon Sulphur Leco Analysis Register',
+      'Error Proof Verification Checklist FDY',
+      'Hardness Test Record',
+      'Impact Test Report',
+      'Inspection Register',
+      'Inspection Result Report',
+      'Microstructure Analysis',
+      'Online Micro Coupon',
+      'QC Register',
+      'Rejection Analysis Register',
+      'Tensile Test Report',
+      'Time Study',
+      'MSI 90',
+      'MSI 90 Incolation'
+    ];
+
+    async function fetchUsers() {
+      try {
+        const res = await fetch('http://localhost:3000/admin/list-users', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        const userList = document.getElementById('user-list');
+        userList.innerHTML = '';
+        
+        if (Array.isArray(data)) {
+          data.forEach(user => {
+            if (user.role !== 'admin') {
+              const userDiv = document.createElement('div');
+              userDiv.className = 'user';
+              let formsHtml = forms.map(form => `
+                <label class="form-checkbox">
+                  <input type="checkbox" value="${form}" 
+                    ${user.form_access && user.form_access.split(',').includes(form) ? 'checked' : ''}>
+                  <a href="/public/${formPaths[form] || 'index.html'}" target="_blank" style="text-decoration:none;color:inherit;">${form}</a>
+                </label>
+              `).join('');
+              userDiv.innerHTML = `
+                <div class="user-header">
+                  <span class="username">${user.username}</span>
+                </div>
+                <div class="forms-container">
+                  ${formsHtml}
+                </div>
+                <button class="save-btn" onclick="assignAccess(${user.id}, this)">
+                  <i class="ph ph-floppy-disk"></i>
+                  Save Access
+                </button>
+              `;
+              userList.appendChild(userDiv);
+            }
+          });
+        }
+      } catch (error) {
+        showMessage('Error fetching users', 'error');
+      }
+    }
+
+    async function assignAccess(userId, btn) {
+      const userDiv = btn.closest('.user');
+      const checkboxes = userDiv.querySelectorAll('input[type="checkbox"]');
+      const selectedForms = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      
+      try {
+        const res = await fetch('http://localhost:3000/auth/assign-access', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ userId, forms: selectedForms })
+        });
+        
+        const data = await res.json();
+        if (data.success) {
+          showMessage('Access updated successfully!', 'success');
+        } else {
+          showMessage(data.error || 'Error updating access', 'error');
+        }
+      } catch (error) {
+        showMessage('Network error. Please try again.', 'error');
+      }
+      
+      fetchUsers();
+    }
+
+    function showMessage(text, type) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = `message ${type}`;
+      
+      setTimeout(() => {
+        msgDiv.textContent = '';
+        msgDiv.className = 'message';
+      }, 3000);
+    }
+
+    fetchUsers();
+
+    // Create user handler
+    const createBtn = document.getElementById('createUserBtn');
+    if (createBtn) {
+      createBtn.addEventListener('click', async () => {
+        const username = document.getElementById('new-username').value.trim();
+        const password = document.getElementById('new-password').value;
+        const role = document.getElementById('new-role').value;
+        if (!username || !password) {
+          showMessage('Username and password are required', 'error');
+          return;
+        }
+        try {
+          const res = await fetch('http://localhost:3000/auth/admin/create-user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ username, password, role })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            showMessage(`User ${data.username} created`, 'success');
+            document.getElementById('new-username').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('new-role').value = 'user';
+            fetchUsers();
+          } else {
+            showMessage(data.error || 'Failed to create user', 'error');
+          }
+        } catch (_) {
+          showMessage('Network error. Please try again.', 'error');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

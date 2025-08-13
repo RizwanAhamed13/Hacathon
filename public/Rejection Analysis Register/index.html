@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rejection Analysis Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #232946;
+      --secondary: #F9F4F8; 
+      --success: #43AA8B;
+      --warning: #FFC857;
+      --danger: #E63946;
+      --light-gray: #4A4E69;
+      --dark-gray: #22223B;
+      --primary-accent: #D2691E;
+      --accent-fade: #F4A261;
+      --card-border: rgba(255, 255, 255, 0.18);
+      --radius-lg: 22px;
+      --transition: cubic-bezier(.4,.9,.35,1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6);
+      animation: float 15s infinite linear;
+    }
+    .table-section {
+  flex: 1;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  margin: 1rem;
+}
+
+.table-header {
+  margin-bottom: 1.5rem;
+}
+
+.table-header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Table Styles */
+.table-responsive {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background-color: white;
+  color: #222;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+}
+
+td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .table-responsive {
+    border-radius: 8px;
+  }
+  
+  th, td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6);
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6);
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    body {
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      opacity: 0.13;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .app-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Full Screen Layout */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header Section */
+    .header-section {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #e65100;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .header-section::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 50px;
+      width: 300px;
+      height: 230px;
+      background-image: url('bg2.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.8;
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      color: #e65100 !important;
+      position: relative;
+      z-index: 2;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: 0.9;
+      font-weight: 400;
+      color: var(--light-gray);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Main Content - Takes remaining space */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Form and Table Container */
+    .content-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255,255,255,0.28);
+    }
+
+    /* Form Section */
+    .form-section {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2.5rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+      border-radius: 16px;
+      margin: 1rem;
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    /* Form Styles */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      align-items: end;
+    }
+
+    .form-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .form-section h3 {
+      color: #1e293b;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1.5rem 0;
+      padding-bottom: 0.8rem;
+      border-bottom: 3px solid #e0f2fe;
+      position: relative;
+    }
+
+    .form-section h3:first-of-type {
+      margin-top: 1.5rem;
+    }
+
+    .form-section h3::before {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      border-radius: 2px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      position: relative;
+      min-height: 1.2rem;
+    }
+
+    .form-group label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      transition: width 0.3s ease;
+    }
+
+    .form-group:focus-within label::after {
+      width: 100%;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+      height: 58px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 58px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: linear-gradient(to right, #FFE0B2, #FFB74D);
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    input:hover:not(:focus),
+    textarea:hover:not(:focus),
+    select:hover:not(:focus) {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .error {
+      color: #dc2626;
+      font-size: 0.85rem;
+      margin-top: 0.6rem;
+      display: block;
+      font-weight: 500;
+      padding: 0;
+      background: none;
+      border: none;
+    }
+
+    .form-group.has-error input {
+      border-color: #dc2626;
+      background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+    }
+
+    .submit-button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 2rem;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 1.2rem 2.5rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      min-width: 250px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    button[type="submit"]:hover::before {
+      left: 100%;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    /* Preloader Styles */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .ripple-wrapper {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .ripple-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100px;
+      width: 100px;
+      z-index: 2;
+      background: url('../bgsakthi.png') no-repeat center center/contain;
+      animation: heartbeat 1.5s infinite cubic-bezier(.4,0,.6,1);
+    }
+
+    .ripple {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 179, 102, 0.2);
+      transform: translate(-50%, -50%) scale(1);
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      animation: ripple-effect 2s cubic-bezier(.4,.9,.35,1) infinite;
+    }
+
+    .ripple.ripple2 {
+      animation-delay: 0.5s;
+    }
+
+    @keyframes ripple-effect {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+      }
+      70% {
+        opacity: 0.2;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes heartbeat {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+      20% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      40% {
+        transform: translate(-50%, -50%) scale(0.95);
+      }
+      60%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 18px;
+      left: 88px;
+      width: 180px;
+      height: 100px;
+      z-index: 3;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      background: none !important;
+      background-color: transparent !important;
+    }
+    @media (max-width: 600px) {
+      .header-logo {
+        width: 44px;
+        top: 8px;
+        left: 8px;
+      }
+    }
+    /* Particle Animation Background */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="particles-background" id="particles-background"></div>
+  <!-- Preloader -->
+  <div class="loader">
+    <div class="ripple-wrapper">
+      <div class="ripple"></div>
+      <div class="ripple ripple2"></div>
+      <div class="ripple-logo"></div>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <img src="../bg2.png" alt="Logo" class="header-logo">
+    <div class="header-section" data-aos="fade-down">
+      <h1 class="main-title">Rejection Analysis Register</h1>
+      <p class="subtitle">By Nexus Tech</p>
+    </div>
+
+    <div class="main-content">
+      <div class="content-container">
+        <div class="form-section" data-aos="fade-up" data-aos-delay="100">
+          <div class="nav-buttons">
+            <a href="../index.html" class="btn btn-secondary">
+              <i class="lucide lucide-arrow-left"></i>
+              Back to Main Menu
+            </a>
+          </div>
+
+     <form id="rejection-analysis-form">
+  <div class="grid">
+    <div class="form-group">
+      <label for="record_date">Record Date</label>
+      <input type="date" id="record_date" name="record_date" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="component_name">Component Name</label>
+      <input type="text" id="component_name" name="component_name" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="ins_qty">Inspected Quantity</label>
+      <input type="number" id="ins_qty" name="ins_qty" min="0" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="rej_qty">Rejected Quantity</label>
+      <input type="number" id="rej_qty" name="rej_qty" min="0" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="rej_percentage">Rejection Percentage</label>
+      <input type="number" id="rej_percentage" name="rej_percentage" min="0" max="100" step="0.01">
+    </div>
+    
+    <div class="form-group">
+      <label for="date_code">Date Code</label>
+      <input type="text" id="date_code" name="date_code">
+    </div>
+  </div>
+
+  <h3>Defect Types</h3>
+  <div class="grid">
+    <div class="form-group">
+      <label for="bh">BH</label>
+      <input type="number" id="bh" name="bh" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="ph">PH</label>
+      <input type="number" id="ph" name="ph" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="sd">SD</label>
+      <input type="number" id="sd" name="sd" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="mb">MB</label>
+      <input type="number" id="mb" name="mb" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="mc">MC</label>
+      <input type="number" id="mc" name="mc" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="scab">Scab</label>
+      <input type="number" id="scab" name="scab" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="sk">SK</label>
+      <input type="number" id="sk" name="sk" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="xr">XR</label>
+      <input type="number" id="xr" name="xr" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="sp">SP</label>
+      <input type="number" id="sp" name="sp" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="og">OG</label>
+      <input type="number" id="og" name="og" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="dt">DT</label>
+      <input type="number" id="dt" name="dt" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="cb">CB</label>
+      <input type="number" id="cb" name="cb" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="mck">MCK</label>
+      <input type="number" id="mck" name="mck" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="gl">GL</label>
+      <input type="number" id="gl" name="gl" min="0">
+    </div>
+    
+    <div class="form-group">
+      <label for="sl">SL</label>
+      <input type="number" id="sl" name="sl" min="0">
+    </div>
+  </div>
+
+  <div class="submit-button-container">
+    <button type="submit">
+      Submit Report
+    </button>
+  </div>
+</form>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="table-section" data-aos="fade" >
+  <div class="table-header">
+    <h2>Rejection Analysis Records</h2>
+  </div>
+  <div class="table-responsive">
+    <table id="results-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Component</th>
+          <th>Inspected</th>
+          <th>Rejected</th>
+          <th>% Rejected</th>
+          <th>Date Code</th>
+          <th>BH</th>
+          <th>PH</th>
+          <th>SD</th>
+          <th>MB</th>
+          <th>MC</th>
+          <th>Scab</th>
+          <th>SK</th>
+          <th>XR</th>
+          <th>SP</th>
+          <th>OG</th>
+          <th>DT</th>
+          <th>CB</th>
+          <th>MCK</th>
+          <th>GL</th>
+          <th>SL</th>
+        </tr>
+      </thead>
+      <tbody id="results-table-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="/Rejection Analysis Register/app.js"></script>
+  <script>
+    // Particle.js initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+    
+    // Initialize AOS animations
+    AOS.init({
+      duration: 600,
+      easing: 'ease-out-quad',
+      once: true,
+      offset: 50
+    });
+
+    // Preloader
+    window.addEventListener('load', function() {
+      const loader = document.querySelector('.loader');
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+      }, 1000);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      document.getElementById('date').value = `${year}-${month}-${day}`;
+    });
+  </script>
+</body>
+</html>

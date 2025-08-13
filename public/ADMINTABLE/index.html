@@ -1,0 +1,816 @@
+<!-- Renamed from index.html. This is your main dashboard page. -->
+<!-- ...existing index.html content... -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Removed redirect logic. index.html now always shows its content. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sakthi Autos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #232946;
+            --secondary: #F9F4F8; 
+            --success: #43AA8B;
+            --warning: #FFC857;
+            --danger: #E63946;
+            --light-gray: #4A4E69;
+            --dark-gray: #22223B;
+            --primary-accent: #D2691E;
+            --accent-fade: #F4A261;
+            --card-border: rgba(255, 255, 255, 0.18);
+            --radius-lg: 22px;
+            --transition: cubic-bezier(.4,.9,.35,1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6); /* Chocolate color particles */
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6); /* Lighter accent color */
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6); /* White particles */
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Update your body styles to remove the old background */
+    body {
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      opacity: 0.13;
+      z-index: 0;
+      pointer-events: none;
+    }
+        .app-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Full Screen Layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #e65100;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50px;
+            width: 300px;
+            height: 230px;
+            background-image: url('bg2.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            color: #e65100 !important;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            margin: 0;
+            opacity: 0.9;
+            font-weight: 400;
+            color: var(--light-gray);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-text {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 3;
+        }
+
+        .details {
+            text-align: right;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+            background: rgba(255,255,255,0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Cards Section */
+        .cards-container {
+            padding: 2rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.28);
+            transition: all 0.3s var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-accent);
+        }
+
+        .card p {
+            color: var(--light-gray);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+        }
+
+        /* Admin assign controls */
+        .admin-assign {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.35);
+            display: none; /* shown only for admin */
+        }
+        .admin-assign .assign-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .admin-assign .assign-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .admin-assign select {
+            width: 100%;
+            min-height: 42px;
+            padding: 0.4rem 0.5rem;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.8);
+        }
+        .admin-assign button {
+            padding: 0.55rem 0.9rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark-gray) 100%);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark-gray) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Preloader Styles */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .ripple-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .ripple-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 100px;
+            width: 100px;
+            z-index: 2;
+            background: url('bgsakthi.png') no-repeat center center/contain;
+            animation: heartbeat 1.5s infinite cubic-bezier(.4,0,.6,1);
+        }
+
+        .ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255, 179, 102, 0.2);
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+            animation: ripple-effect 2s cubic-bezier(.4,.9,.35,1) infinite;
+        }
+
+        .ripple.ripple2 {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes ripple-effect {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.7;
+            }
+            70% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            60%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-text {
+                position: static;
+                align-items: center;
+                margin-bottom: 1rem;
+            }
+            
+            .details {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-title {
+                font-size: 1.75rem;
+            }
+            
+            .cards-container {
+                padding: 1rem;
+            }
+        }
+
+        .header-logo {
+            position: absolute;
+            top: 18px;
+            left: 88px;
+            width: 180px;
+            height: 100px;
+            z-index: 3;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: none !important;
+            background-color: transparent !important;
+        }
+        @media (max-width: 600px) {
+            .header-logo {
+                width: 44px;
+                top: 8px;
+                left: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="loader">
+        <div class="ripple-wrapper">
+            <div class="ripple"></div>
+            <div class="ripple ripple2"></div>
+            <div class="ripple-logo"></div>
+        </div>
+    </div>
+
+    <div class="app-container">
+       
+        <div class="header-section" data-aos="fade-down">
+            <div class="header-text">
+                <div class="details">
+                    <div>Sakthi Autos Pvt. Ltd.</div>
+                    <div></div>
+                    <div>Erode</div>
+                </div>
+            </div>
+            <h1 class="main-title">SAKTHI AUTOS</h1>
+            <p class="subtitle">Quality Management System Dashboard - By Nexus Techs</p>
+            <div style="display:flex;gap:0.75rem;justify-content:center;margin:1rem 0;flex-wrap:wrap;">
+              <button onclick="window.location.href='./auth/admin.html'" class="btn" style="background: linear-gradient(135deg,#D2691E,#F4A261); color: #fff; border-radius: 8px; font-weight: 600; box-shadow: 0 2px 8px rgba(210,105,30,0.12); border: none; cursor: pointer; padding: 0.7rem 1.5rem;">
+                <i class='lucide lucide-user-cog' style='margin-right:0.5rem;'></i>Admin Panel
+              </button>
+              <button onclick="window.location.href='./auth/audit-log.html'" class="btn" style="background: linear-gradient(135deg,#4B5563,#111827); color: #fff; border-radius: 8px; font-weight: 600; box-shadow: 0 2px 8px rgba(17,24,39,0.15); border: none; cursor: pointer; padding: 0.7rem 1.5rem;">
+                <i class='lucide lucide-list' style='margin-right:0.5rem;'></i>Audit Log
+              </button>
+            </div>
+        </div>
+
+        <div class="cards-container">
+            <div class="cards">
+                
+                <div class="card" data-aos="fade-up" data-aos-delay="150" data-form-name="MSI 90">
+                    <h3>MSI 90 INOCULATION</h3>
+                    <p>Form for MSI 90 parameters and monitoring.</p>
+                    <a href="fb02data.html" class="btn">
+                        <i class="lucide lucide-settings"></i>
+                        Validate
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-aos="fade-up" data-aos-delay="200" data-form-name="MSI 90 Incolation">
+                    <h3> MSI INOCULATION</h3>
+                    <p>Form for MSI 90 Incubation parameters.</p>
+                    <a href="./msi 90 incolation/fbq03.html" class="btn">
+                        <i class="lucide lucide-flask-conical"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-aos="fade-up" data-aos-delay="250" data-form-name="Time Study">
+                    <h3> TIME STUDY AND PROCESS CONTROL</h3>
+                    <p>Form for recording time study metrics and parameters.</p>
+                    <a href="./Time Study/index.html" class="btn">
+                        <i class="lucide lucide-clock"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-aos="fade-up" data-aos-delay="300" data-form-name="QC Register">
+                    <h3>Q.C.REGISTER</h3>
+                    <p>Form for quality control register data.</p>
+                    <a href="./QC Register/index.html" class="btn">
+                        <i class="lucide lucide-clipboard-check"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-aos="fade-up" data-aos-delay="350" data-form-name="Online Micro Coupon">
+                    <h3>ONLINE MICRO COUPEN INSPECTION RECORD </h3>
+                    <p>Form for online micro coupon inspection and nodularity analysis.</p>
+                    <a href="./Online Micro Coupon/index.html" class="btn">
+                        <i class="lucide lucide-inspect"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-aos="fade-up" data-aos-delay="400" data-form-name="Inspection Register">
+                    <h3> ONLINE FEEDBACK INSPECTION REGISTER</h3>
+                    <p>Form for recording inspection register data and shift-wise defects.</p>
+                    <a href="./Inspection Register/index.html" class="btn">
+                        <i class="lucide lucide-clipboard-list"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-aos="fade-up" data-aos-delay="450" data-form-name="Tensile Test Report">
+                    <h3>TENSILE TEST REPORT</h3>
+                    <p>Form for recording tensile test results and mechanical properties.</p>
+                    <a href="./Tensile Test Report/index.html" class="btn">
+                        <i class="lucide lucide-test-tube"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" data-aos="fade-up" data-aos-delay="100" data-form-name="Microstructure Analysis">
+                    <h3>MICRO  STRUCTURE  ANALYSIS  REGISTER</h3>
+                    <p>Form for recording microstructure analysis data and metallurgical properties.</p>
+                    <a href="./Microstructure Analysis/index.html" class="btn">
+                        <i class="lucide lucide-microscope"></i>
+                        Access Form
+                    </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
+                </div>
+                  <div class="card" data-form-name="Inspection Result Report">
+                <h3> INSPECTION RESULT REPORT</h3>
+                <p>Form for recording inspection result report data.</p>
+                <a href="./Inspection Result Report/index.html" class="btn"> <i class="lucide lucide-microscope"></i>Access Form</a>
+                <div class="admin-assign">
+                    <div class="assign-title">Assign access to users</div>
+                    <div class="assign-row">
+                        <select class="assign-select" multiple></select>
+                        <button class="assign-save">Save</button>
+                    </div>
+                </div>
+                </div>
+                 <div class="card" data-form-name="Impact Test Report">
+                <h3>IMPACT TEST REPORT</h3>
+                <p>Form for recording impact test report data.</p>
+                <a href="./Impact Test Report/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
+                 </div>
+                 <div class="card" data-form-name="Rejection Analysis Register">
+                <h3> REJECTION ANALYSIS REGISTER</h3>
+                <p>Form for recording rejection analysis register data.</p>
+                <a href="./Rejection Analysis Register/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
+                </div>
+                <div class="card" data-form-name="Hardness Test Record">
+                <h3>HARDNESS TEST RECORD</h3>
+                <p>Form for recording hardness test record data.</p>
+                <a href="./Hardness Test Record/index.html" class="btn">Access Form</a>
+                <div class="admin-assign">
+                    <div class="assign-title">Assign access to users</div>
+                    <div class="assign-row">
+                        <select class="assign-select" multiple></select>
+                        <button class="assign-save">Save</button>
+                    </div>
+                </div>
+                </div>
+                 <div class="card" data-form-name="Carbon Sulphur Leco Analysis Register">
+                <h3>CARBON SULPHUR LECO ANALYSIS REGISTER</h3>
+                <p>Form for recording carbon and sulphur analysis data.</p>
+                <a href="./Carbon Sulphur Leco Analysis Register/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
+                </div>
+                 <div class="card" data-form-name="Error Proof Verification Checklist FDY">
+                <h3> ERROR PROOF VERIFICATION CHECK LIST - FDY</h3>
+                <p>Form for error proof verification checklist FDY data.</p>
+                <a href="./Error Proof Verification Checklist FDY/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
+            </div>
+            </div>
+            
+            <footer>
+                © 2025 Sakthi Autos Pvt. Ltd. | Quality Management System - Nexus Techs
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out-quad',
+            once: true,
+            offset: 50
+        });
+
+        // Preloader
+        window.addEventListener('load', function() {
+            const loader = document.querySelector('.loader');
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 1000);
+        });
+
+        // Admin-only: assign access per form directly from cards
+        document.addEventListener('DOMContentLoaded', () => {
+          try {
+            const role = localStorage.getItem('role');
+            const token = localStorage.getItem('token');
+            if (role !== 'admin' || !token) return; // Only admins see controls
+
+            const cards = Array.from(document.querySelectorAll('.card[data-form-name]'));
+            if (!cards.length) return;
+
+            // Reveal admin UI blocks
+            cards.forEach(card => {
+              const adminBlock = card.querySelector('.admin-assign');
+              if (adminBlock) adminBlock.style.display = 'block';
+            });
+
+            // Fetch users and hydrate selects
+            fetch('http://localhost:3000/admin/list-users', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            })
+              .then(res => res.json())
+              .then(users => {
+                if (!Array.isArray(users)) return;
+
+                // Cache current access per user
+                const userIdToForms = new Map();
+                users.forEach(u => {
+                  const forms = (u.form_access || '')
+                    .split(',')
+                    .map(f => f.trim())
+                    .filter(Boolean);
+                  userIdToForms.set(u.id, forms);
+                });
+
+                cards.forEach(card => {
+                  const formName = card.getAttribute('data-form-name');
+                  const select = card.querySelector('.assign-select');
+                  const saveBtn = card.querySelector('.assign-save');
+                  if (!select || !saveBtn) return;
+
+                  // Populate options
+                  select.innerHTML = '';
+                  users
+                    .filter(u => u.role !== 'admin')
+                    .forEach(u => {
+                      const opt = document.createElement('option');
+                      opt.value = String(u.id);
+                      opt.textContent = u.username;
+                      const forms = userIdToForms.get(u.id) || [];
+                      if (forms.includes(formName)) opt.selected = true;
+                      select.appendChild(opt);
+                    });
+
+                  // Save handler for this card/form
+                  saveBtn.addEventListener('click', async () => {
+                    const selectedIds = new Set(Array.from(select.selectedOptions).map(o => Number(o.value)));
+                    const updates = [];
+
+                    users.filter(u => u.role !== 'admin').forEach(u => {
+                      const currentForms = new Set(userIdToForms.get(u.id) || []);
+                      const hasNow = selectedIds.has(u.id);
+                      const hadBefore = currentForms.has(formName);
+
+                      if (hasNow && !hadBefore) {
+                        currentForms.add(formName);
+                      } else if (!hasNow && hadBefore) {
+                        currentForms.delete(formName);
+                      } else {
+                        return; // no change
+                      }
+
+                      const formsArray = Array.from(currentForms);
+                      updates.push(
+                        fetch('http://localhost:3000/auth/assign-access', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                          },
+                          body: JSON.stringify({ userId: u.id, forms: formsArray })
+                        }).then(r => r.json())
+                      );
+                    });
+
+                    if (!updates.length) return;
+
+                    try {
+                      await Promise.all(updates);
+                      // Refresh local cache by refetching users
+                      const fresh = await fetch('http://localhost:3000/admin/list-users', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                      }).then(r => r.json());
+                      if (Array.isArray(fresh)) {
+                        userIdToForms.clear();
+                        fresh.forEach(u => {
+                          const forms = (u.form_access || '')
+                            .split(',')
+                            .map(f => f.trim())
+                            .filter(Boolean);
+                          userIdToForms.set(u.id, forms);
+                        });
+                      }
+                      const original = saveBtn.textContent;
+                      saveBtn.textContent = 'Saved';
+                      setTimeout(() => (saveBtn.textContent = original), 1200);
+                    } catch (e) {
+                      const original = saveBtn.textContent;
+                      saveBtn.textContent = 'Error';
+                      setTimeout(() => (saveBtn.textContent = original), 1500);
+                    }
+                  });
+                });
+              })
+              .catch(() => {
+                // fail silently for non-admin sessions
+              });
+          } catch (_) {
+            // no-op
+          }
+        });
+    </script>
+</body>
+</html>

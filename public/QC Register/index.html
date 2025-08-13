@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q.C.REGISTER</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
+  <style>
+    :root {
+      --primary: #232946;
+      --secondary: #F9F4F0;
+      --success: #43AA8B;
+      --warning: #FFC857;
+      --danger: #E63946;
+      --light-gray: #4A4E69;
+      --dark-gray: #22223B;
+      --primary-accent: #D2691E;
+      --accent-fade: #F4A261;
+      --card-border: rgba(255, 255, 255, 0.18);
+      --radius-lg: 22px;
+      --transition: cubic-bezier(.4,.9,.35,1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6); /* Chocolate color particles */
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6); /* Lighter accent color */
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6); /* White particles */
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Update your body styles to remove the old background */
+    body {
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      opacity: 0.13;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .app-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Section */
+    .header-section {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #e65100;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-section::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 50px;
+      width: 300px;
+      height: 230px;
+      background-image: url('bg2.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.8;
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      color: #e65100 !important;
+      position: relative;
+      z-index: 2;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: 0.9;
+      font-weight: 400;
+      color: var(--light-gray);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    /* Form Container */
+    .content-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255,255,255,0.28);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    /* Form Styles */
+    .form-section-wrapper {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-bottom: 2rem;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .form-group {
+      margin-bottom: 1.8rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .form-section h2 {
+      color: #1e293b;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1.5rem 0;
+      padding-bottom: 0.8rem;
+      border-bottom: 3px solid #e0f2fe;
+      position: relative;
+    }
+
+    .form-section h2:first-of-type {
+      margin-top: 1.5rem;
+    }
+
+    .form-section h2::before {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      border-radius: 2px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      position: relative;
+      min-height: 1.2rem;
+    }
+
+    .required label::after {
+      content: " *";
+      color: #e74c3c;
+    }
+
+    .form-group label::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      transition: width 0.3s ease;
+    }
+
+    .form-group:focus-within label::after {
+      width: 100%;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      position: relative;
+      height: 58px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 58px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #FFB74D;
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(255, 183, 77, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    input:hover:not(:focus),
+    textarea:hover:not(:focus),
+    select:hover:not(:focus) {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      align-items: end;
+    }
+
+    /* Metal Composition Grid */
+    .metal-composition-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .metal-composition-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* Submit Button */
+    .submit-button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-top: 2rem;
+    }
+
+    button[type="submit"] {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 1.2rem 2.5rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      min-width: 250px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    button[type="submit"]:hover::before {
+      left: 100%;
+    }
+
+    /* Response Message */
+    .response {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+      display: none;
+      font-weight: 600;
+    }
+
+    .success {
+      background-color: #d4efdf;
+      color: #145a32;
+      border: 1px solid #a9dfbf;
+    }
+
+    .error {
+      background-color: #fadbd8;
+      color: #922b21;
+      border: 1px solid #f5b7b1;
+    }
+
+    /* Sub-section styling */
+    .sub-section {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid #FFB74D;
+      box-shadow: 0 8px 32px rgba(210, 105, 30, 0.13), 0 2px 12px rgba(244, 162, 97, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+    }
+
+    .sub-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.3) 0%, rgba(248, 243, 238, 0.5) 100%);
+      z-index: -1;
+      border-radius: 16px;
+    }
+
+    /* Table Section - Same styling as previous code */
+    .table-section {
+      flex: 1;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 2rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.28);
+      margin-top: 2rem;
+    }
+
+    .table-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .table-responsive {
+      flex: 1;
+      overflow: auto;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border: 1px solid #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      font-size: 0.9rem;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th {
+      background-color: white;
+      color: #222;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border: none;
+      box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+    }
+    
+
+    th:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    th .sub {
+      font-size: 0.65rem;
+      font-weight: 400;
+      opacity: 0.9;
+      text-transform: none;
+      display: block;
+      margin-top: 2px;
+    }
+
+    td {
+      padding: 1.2rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    tr:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+    }
+
+    tr:last-child td:first-child {
+      border-bottom-left-radius: 12px;
+    }
+
+    tr:last-child td:last-child {
+      border-bottom-right-radius: 12px;
+    }
+
+    .btn-small {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.75rem;
+      min-width: auto;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .checked-cell {
+      color: var(--success);
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .unchecked-cell {
+      color: var(--danger);
+      text-align: center;
+    }
+
+    .pressure-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .metal-composition-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .metal-composition-section {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .metal-composition-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .main-title {
+        font-size: 2rem;
+      }
+      
+      .content-container {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .main-title {
+        font-size: 1.75rem;
+      }
+      
+      .nav-buttons {
+        flex-direction: column;
+      }
+      
+      button[type="submit"] {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="particles-background" id="particles-background"></div>
+  <div class="app-container">
+    <div class="header-section">
+      <h1 class="main-title">QC Management System</h1>
+      <p class="subtitle">By Nexus Tech</p>
+      <p class="subtitle">Q.C.REGISTER</p>
+    </div>
+
+    <div class="main-content">
+      <div class="content-container">
+        <div class="nav-buttons">
+          <a href="../index.html" class="btn btn-secondary">
+            <i class="lucide lucide-arrow-left"></i>
+            Back to Main Menu
+          </a>
+        </div>
+
+        <form id="qcRegisterForm">
+          <!-- Basic Information Section -->
+          <div class="sub-section">
+            <h2>Basic Information</h2>
+            <div class="grid">
+              <div class="form-group required">
+                <label for="record_date">Record Date</label>
+                <input type="date" id="record_date" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="disa_line">DISA Line</label>
+                <select id="disa_line">
+                  <option value="">Select DISA Line</option>
+                  <option value="Line 1">Line 1</option>
+                  <option value="Line 2">Line 2</option>
+                  <option value="Line 3">Line 3</option>
+                </select>
+              </div>
+              
+              <div class="form-group required">
+                <label for="part_name">Part Name</label>
+                <input type="text" id="part_name" required>
+              </div>
+              
+              <div class="form-group required">
+                <label for="heat_code">Heat Code</label>
+                <input type="text" id="heat_code" required>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Additional Information -->
+          <div class="sub-section">
+            <div class="grid">
+              <div class="form-group">
+                <label for="qty_moulds">Quantity of Moulds</label>
+                <input type="number" id="qty_moulds" min="0">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Metal Composition Sections - Side by Side -->
+          <div class="metal-composition-container">
+            <!-- Metal Composition 1 -->
+            <div class="sub-section">
+              <h2> Metal Composition (%)</h2>
+              <div class="metal-composition-section">
+                <div class="form-group">
+                  <label for="c1">C</label>
+                  <input type="number" id="c1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="si1">Si</label>
+                  <input type="number" id="si1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="mn1">Mn</label>
+                  <input type="number" id="mn1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="p1">P</label>
+                  <input type="number" id="p1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="s1">S</label>
+                  <input type="number" id="s1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="mg1">Mg</label>
+                  <input type="number" id="mg1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="f_l1">F/L</label>
+                  <input type="number" id="f_l1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="cu1">Cu</label>
+                  <input type="number" id="cu1" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="cr1">Cr</label>
+                  <input type="number" id="cr1" step="0.001">
+                </div>
+              </div>
+            </div>
+            
+            <!-- Metal Composition 2 -->
+            <div class="sub-section">
+              <h2>Corrective Addition (Kgs)</h2>
+              <div class="metal-composition-section">
+                <div class="form-group">
+                  <label for="c2">C</label>
+                  <input type="number" id="c2" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="si2">Si</label>
+                  <input type="number" id="si2" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="mn2">Mn</label>
+                  <input type="number" id="mn2" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="s2">S</label>
+                  <input type="number" id="s2" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="cr2">Cr</label>
+                  <input type="number" id="cr2" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="cu2">Cu</label>
+                  <input type="number" id="cu2" step="0.001">
+                </div>
+                
+                <div class="form-group">
+                  <label for="sn2">Sn</label>
+                  <input type="number" id="sn2" step="0.001">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Pouring Parameters -->
+          <div class="sub-section">
+            <h2>Pouring Parameters</h2>
+            <div class="grid">
+              <div class="form-group">
+                <label for="pouring_time">Time of Pouring</label>
+                <input type="time" id="pouring_time">
+              </div>
+              
+              <div class="form-group">
+                <label for="pouring_temp">Pouring Temperature (°C)</label>
+                <input type="number" id="pouring_temp" step="0.1">
+              </div>
+              
+              <div class="form-group">
+                <label for="pp_code">PP Code</label>
+                <input type="text" id="pp_code">
+              </div>
+              
+              <div class="form-group">
+                <label for="fc_no_heat_no">FC No/Heat No</label>
+                <input type="text" id="fc_no_heat_no">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Magnesium Treatment -->
+          <div class="sub-section">
+            <h2>Magnesium Treatment</h2>
+            <div class="grid">
+              <div class="form-group">
+                <label for="mg_kgs">Mg Kgs</label>
+                <input type="number" id="mg_kgs" step="0.001">
+              </div>
+              
+              <div class="form-group">
+                <label for="res_mg">Residual Mg (%)</label>
+                <input type="number" id="res_mg" step="0.001">
+              </div>
+              
+              <div class="form-group">
+                <label for="converter_percent">Converter Percent (%)</label>
+                <input type="number" id="converter_percent" step="0.001">
+              </div>
+              
+              <div class="form-group">
+                <label for="rec_mg_percent">Recovered Mg (%)</label>
+                <input type="number" id="rec_mg_percent" step="0.001">
+              </div>
+              
+              <div class="form-group">
+                <label for="stream_innoculat">Stream Inoculant</label>
+                <input type="number" id="stream_innoculat" step="0.001">
+              </div>
+              
+              <div class="form-group">
+                <label for="p_time_sec">Pouring Time (sec)</label>
+                <input type="number" id="p_time_sec" step="0.1">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Tapping Information -->
+          <div class="sub-section">
+            <h2>Tapping Information</h2>
+            <div class="grid">
+              <div class="form-group">
+                <label for="treatment_no">Treatment No</label>
+                <input type="text" id="treatment_no">
+              </div>
+              
+              <div class="form-group">
+                <label for="con_no">Converter No</label>
+                <input type="text" id="con_no">
+              </div>
+              
+              <div class="form-group">
+                <label for="tapping_time">Tapping Time</label>
+                <input type="time" id="tapping_time">
+              </div>
+              
+              <div class="form-group">
+                <label for="tapping_wt_kgs">Tapping Weight (kgs)</label>
+                <input type="number" id="tapping_wt_kgs" step="0.001">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="remarks">Remarks</label>
+            <textarea id="remarks" rows="3"></textarea>
+          </div>
+          
+          <div class="submit-button-container">
+            <button type="submit" id="submitBtn">
+              <i class="lucide lucide-save"></i>
+              Submit QC Register Data
+            </button>
+          </div>
+          
+          <div id="responseMessage" class="response"></div>
+        </form>
+
+        <!-- Data Table Section -->
+       <div class="table-section">
+  <div class="table-header">
+    <h2 style="text-align: center;">QC Register Records</h2>
+  </div>
+  <div class="table-responsive">
+    <table id="qcRecordsTable">
+      <thead>
+        <tr>
+         
+          <th>Date</th>
+          <th>DISA Line</th>
+          <th>Part Name</th>
+          <th>Heat Code</th>
+          <th>Qty Moulds</th>
+          <th>Remarks</th>
+          <th>C1</th>
+          <th>Si1</th>
+          <th>Mn1</th>
+          <th>P1</th>
+          <th>S1</th>
+          <th>Mg1</th>
+          <th>F_L1</th>
+          <th>Cu1</th>
+          <th>Cr1</th>
+          <th>C2</th>
+          <th>Si2</th>
+          <th>Mn2</th>
+          <th>S2</th>
+          <th>Cr2</th>
+          <th>Cu2</th>
+          <th>Sn2</th>
+          <th>Pouring Time</th>
+          <th>Pouring Temp (°C)</th>
+          <th>PP Code</th>
+          <th>FC No / Heat No</th>
+          <th>Mg Kgs</th>
+          <th>Residual Mg (%)</th>
+          <th>Converter %</th>
+          <th>Rec Mg %</th>
+          <th>Stream Innoculat</th>
+          <th>P Time Sec</th>
+          <th>Treatment No</th>
+          <th>Con No</th>
+          <th>Tapping Time</th>
+          <th>Corrective Addition (Kgs)</th>
+          <th>Tapping Wt (Kgs)</th>
+        </tr>
+      </thead>
+      <tbody id="recordsTableBody">
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="/QC Register/app.js"></script>
+
+<script> document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Your existing code
+      updateHourlyTimestamp();
+      setInterval(updateHourlyTimestamp, 60000);
+    });</script>
+  
+</body>
+</html>

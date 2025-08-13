@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSI Incolation Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+          --primary: #232946;
+          --secondary: #F9F4F0;
+          --success: #43AA8B;
+          --warning: #FFC857;
+          --danger: #E63946;
+          --light-gray: #4A4E69;
+          --dark-gray: #22223B;
+          --primary-accent: #D2691E;
+          --accent-fade: #F4A261;
+          --card-border: rgba(255, 255, 255, 0.18);
+          --radius-lg: 22px;
+          --transition: cubic-bezier(.4,.9,.35,1);
+        }
+
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        html, body {
+          height: 100%;
+          width: 100%;
+        }
+
+        .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6); /* Chocolate color particles */
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6); /* Lighter accent color */
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6); /* White particles */
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Update your body styles to remove the old background */
+    body {
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
+
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: inherit;
+      opacity: 0.13;
+      z-index: 0;
+      pointer-events: none;
+    }
+        .fullscreen-container {
+          position: relative;
+          z-index: 1;
+        }
+
+        .header-section {
+          text-align: center;
+          padding: 2rem 1rem;
+          background: rgba(255,255,255,0.18);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          color: #e65100;
+          box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+          position: relative;
+          overflow: hidden;
+          flex-shrink: 0;
+          min-width: 320px;
+          min-height: 160px;
+          /* Remove flexbox for header-section */
+          display: block;
+        }
+        .header-section::before {
+          content: '';
+          position: absolute;
+          top: -30px;
+          left: 50px;
+          width: 300px;
+          height: 230px;
+          background-image: url('bg2.png');
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position: center;
+          z-index: 1;
+          opacity: 0.8;
+        }
+        .header-logo {
+      background: none !important;
+      background-color: transparent !important;
+      position: absolute;
+      left: 88px;
+      top: 18px;
+      width: 180px;
+      height: 100px;
+      z-index: 3;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      pointer-events: none;
+    }
+        @media (max-width: 600px) {
+          .header-section {
+            min-width: 0;
+            min-height: 120px;
+            padding: 1.2rem 0.5rem;
+          }
+          .header-logo {
+            width: 44px;
+            top: 8px;
+            left: 8px;
+            height: 44px;
+          }
+        }
+        .main-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin: 0 0 0.5rem 0;
+          letter-spacing: 1px;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+          color: #e65100;
+          position: relative;
+          z-index: 2;
+        }
+        .subtitle {
+          font-size: 1.2rem;
+          margin: 0;
+          opacity: 0.9;
+          font-weight: 400;
+          color: var(--light-gray);
+          position: relative;
+          z-index: 2;
+        }
+        .main-title, .subtitle {
+          color: #e65100 !important;
+          position: relative;
+          z-index: 2;
+        }
+
+        .form-container {
+          flex: 1 1 auto;
+          width: 100vw;
+          min-height: 0;
+          margin: 0;
+          padding: 1.5rem;
+          border: none;
+          border-radius: 0;
+          background:  rgba(255,255,255,0.18);
+                    backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+        }
+
+        .form-section {
+          background: rgba(255,255,255,0.18);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          padding: 2.5rem;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+          flex-shrink: 0;
+          border-radius: 16px;
+          margin: 0.5rem;
+          border: 1px solid rgba(255,255,255,0.28);
+          max-width: calc(100vw - 3rem);
+          width: calc(100% - 1rem);
+        }
+
+        .form-section h3 {
+          margin-top: 0;
+          color: #1e293b;
+          font-size: 1.4rem;
+          font-weight: 600;
+          margin: 2.5rem 0 1.5rem 0;
+          padding-bottom: 0.8rem;
+          border-bottom: 3px solid #e0f2fe;
+          position: relative;
+        }
+        .form-section h3:first-of-type {
+          margin-top: 1.5rem;
+        }
+        .form-section h3::before {
+          content: '';
+          position: absolute;
+          bottom: -3px;
+          left: 0;
+          width: 60px;
+          height: 3px;
+          background: linear-gradient(to right, #FFE0B2, #FFB74D);
+          border-radius: 2px;
+        }
+
+        .form-group {
+          margin-bottom: 1.8rem;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 0.8rem;
+          font-weight: 600;
+          color: #334155;
+          font-size: 0.9rem;
+          letter-spacing: 0.3px;
+          position: relative;
+          min-height: 1.2rem;
+        }
+        label::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(to right, #FFE0B2, #FFB74D);
+          transition: width 0.3s ease;
+        }
+        .form-group:focus-within label::after {
+          width: 100%;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"],
+        select {
+          width: 100%;
+          padding: 0.8rem 1rem;
+          border: 2px solid #e2e8f0;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 500;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+          position: relative;
+          height: 50px;
+          box-sizing: border-box;
+        }
+        textarea {
+          width: 100%;
+          padding: 0.8rem 1rem;
+          border: 2px solid #e2e8f0;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 500;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+          position: relative;
+          min-height: 50px;
+          resize: vertical;
+          font-family: inherit;
+          line-height: 1.6;
+          box-sizing: border-box;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+          border-color: linear-gradient(to right, #FFE0B2, #FFB74D);
+          outline: none;
+          background: white;
+          box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+          transform: translateY(-2px);
+        }
+        input:hover:not(:focus),
+        textarea:hover:not(:focus),
+        select:hover:not(:focus) {
+          border-color: #cbd5e1;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .checkbox-group {
+          display: flex;
+          align-items: center;
+        }
+        .checkbox-group input {
+          width: auto;
+          margin-right: 10px;
+        }
+
+        .button-group {
+          display: flex;
+          gap: 10px;
+          margin-top: 20px;
+          justify-content: center;
+        }
+        button {
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          padding: 1.2rem 2.5rem;
+          border: none;
+          border-radius: 25px;
+          font-size: 1.1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.8rem;
+          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+          position: relative;
+          overflow: hidden;
+          font-family: 'Poppins', sans-serif;
+          min-width: 200px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+        .btn-primary {
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          font-size: 18px;
+          padding: 15px 40px;
+        }
+        .btn-secondary {
+          background: #6c757d;
+          color: white;
+        }
+        .btn-prefill {
+          background: #17a2b8;
+          color: white;
+        }
+        .btn-primary:hover {
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        button:hover {
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+
+        button:active {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s;
+        }
+
+        button:hover::before {
+          left: 100%;
+        }
+        .btn-secondary:hover {
+          background: #545b62;
+        }
+        .btn-prefill:hover {
+          background: #138496;
+        }
+
+        .response-message {
+          margin-top: 15px;
+          padding: 10px;
+          border-radius: 4px;
+          display: none;
+        }
+        .response-message.success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+        }
+        .response-message.error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+        }
+        .nav-buttons {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          margin-bottom: 20px;
+          gap: 20px;
+        }
+        .suggestion-item {
+          padding: 10px;
+          cursor: pointer;
+          border-bottom: 1px solid #eee;
+        }
+        .suggestion-item:hover {
+          background-color: #f5f5f5;
+        }
+        .suggestion-item:last-child {
+          border-bottom: none;
+        }
+        .highlight {
+          background-color: #007bff;
+          color: white;
+        }
+        .recent-products {
+          margin-bottom: 15px;
+          padding: 10px;
+          background-color: #e7f3ff;
+          border-radius: 4px;
+        }
+        .recent-products h4 {
+          margin: 0 0 10px 0;
+          color: #0056b3;
+        }
+        .recent-btn {
+          display: inline-block;
+          margin: 2px;
+          padding: 5px 10px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 3px;
+          cursor: pointer;
+          font-size: 12px;
+        }
+        .recent-btn:hover {
+          background-color: #0056b3;
+        }
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 15px;
+          width: 100%;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        .prefill-indicator {
+          background-color: #fff3cd;
+          border: 1px solid #ffeaa7;
+          color: #856404;
+          padding: 8px;
+          border-radius: 4px;
+          margin-bottom: 15px;
+          font-size: 14px;
+        }
+
+        /* Checkbox Styles */
+        .stylish-checkbox {
+          appearance: none;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          width: 24px;
+          height: 24px;
+          border: 3px solid #cbd5e1;
+          border-radius: 8px;
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+          cursor: pointer;
+          position: relative;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          flex-shrink: 0;
+        }
+
+        .stylish-checkbox:checked {
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          border-color: #10b981;
+          transform: scale(1.05);
+          box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .stylish-checkbox:checked::after {
+          content: '✓';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 14px;
+          font-weight: bold;
+          animation: checkmark 0.3s ease-in-out;
+          display: block;
+          line-height: 1;
+        }
+
+        @keyframes checkmark {
+          0% { transform: translate(-50%, -50%) scale(0); }
+          50% { transform: translate(-50%, -50%) scale(1.2); }
+          100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .stylish-checkbox:hover {
+          border-color: #10b981;
+          transform: scale(1.02);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .checkbox {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 1rem;
+          padding: 1rem 1.2rem;
+          background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+          border-radius: 12px;
+          border: 2px solid #e2e8f0;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          height: 58px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+          box-sizing: border-box;
+          flex-direction: row;
+        }
+
+        .checkbox:hover {
+          border-color: #cbd5e1;
+          background: white;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .checkbox:focus-within {
+          border-color: linear-gradient(to right, #FFE0B2, #FFB74D);
+          background: white;
+          box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+          transform: translateY(-2px);
+        }
+
+        .checkbox input {
+          width: 24px;
+          height: 24px;
+          margin: 0;
+          cursor: pointer;
+          flex-shrink: 0;
+        }
+
+        .checkbox label {
+          margin: 0;
+          cursor: pointer;
+          font-weight: 500;
+          color: #475569;
+          font-size: 0.95rem;
+          flex-grow: 1;
+          display: flex;
+          align-items: center;
+        }
+
+        .checkbox input:checked + label {
+          color: linear-gradient(to right, #FFE0B2, #FFB74D);
+          font-weight: 600;
+        }
+        @media (max-width: 992px) {
+          .form-section {
+            padding: 1.5rem 1rem;
+          }
+        }
+        @media (max-width: 768px) {
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        /* Checkbox Styles */
+.stylish-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #cbd5e1;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    flex-shrink: 0;
+}
+
+.stylish-checkbox:checked {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+
+.stylish-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    animation: checkmark 0.3s ease-in-out;
+    display: block;
+    line-height: 1;
+}
+
+@keyframes checkmark {
+    0% { transform: translate(-50%, -50%) scale(0); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.stylish-checkbox:hover {
+    border-color: #10b981;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    height: 58px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    box-sizing: border-box;
+    flex-direction: row;
+}
+
+.checkbox:hover {
+    border-color: #cbd5e1;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.checkbox:focus-within {
+    border-color: linear-gradient(to right, #FFE0B2, #FFB74D);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15), 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.checkbox input {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 500;
+    color: #475569;
+    font-size: 0.95rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox input:checked + label {
+    color: linear-gradient(to right, #FFE0B2, #FFB74D);
+    font-weight: 600;
+}
+
+/* Preloader Styles */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ripple-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.ripple-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100px;
+  width: 100px;
+  z-index: 2;
+  background: url('../bgsakthi.png') no-repeat center center/contain;
+  animation: heartbeat 1.5s infinite cubic-bezier(.4,0,.6,1);
+}
+
+.ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(255, 179, 102, 0.2);
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  animation: ripple-effect 2s cubic-bezier(.4,.9,.35,1) infinite;
+}
+
+.ripple.ripple2 {
+  animation-delay: 0.5s;
+}
+
+@keyframes ripple-effect {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  20% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  60%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+    </style>
+</head>
+<body>
+  <div class="particles-background" id="particles-background"></div>
+    <!-- Preloader -->
+    <div class="loader">
+        <div class="ripple-wrapper">
+            <div class="ripple"></div>
+            <div class="ripple ripple2"></div>
+            <div class="ripple-logo"></div>
+        </div>
+    </div>
+
+    <div class="fullscreen-container" data-aos="fade-in">
+      <img src="../bg2.png" alt="Logo" class="header-logo">
+      <div class="header-section" data-aos="fade-down" style="text-align: centre;">
+        <h1 class="main-title">QC Management System</h1>
+        <p class="subtitle">By Nexus Tech</p>
+        <p class="subtitle"> MSI INOCULATION SYSTEM CHECKLIST - DISA </p>
+      </div>
+        <div class="form-container" data-aos="fade-up" data-aos-delay="100">
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="window.location.href='../index.html'">Back to Main Menu</button>
+                <div></div>
+            </div>
+            
+            <!-- Recent Products Section -->
+            <div id="recentProducts" class="recent-products" style="display: none;">
+                <h4>Recently Used Products:</h4>
+                <div id="recentProductsList"></div>
+            </div>
+            
+            <div class="form-section" data-aos="fade-up" data-aos-delay="200">
+                <h3>Component Selection</h3>
+                <div class="form-group">
+                    <label for="componentInput">Component in Production:</label>
+                    <div style="position: relative;">
+                        <input type="text" id="componentInput" placeholder="Enter product code or description" oninput="filterComponents()" onfocus="showSuggestions()" autocomplete="off">
+                        <div id="componentSuggestions" style="position: absolute; z-index: 99999; width: 100%; max-height: 200px; overflow-y: auto; border: 1px solid #ccc; background: white; display: none; top: 100%; left: 0; margin-top: 4px; margin-bottom: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.12);"></div>
+                    </div>
+                    <input type="hidden" id="selectedComponent">
+                </div>
+                <div class="button-group">
+                    <button class="btn-prefill" onclick="prefillLastRecord()">Prefill from Last Record</button>
+                </div>
+            </div>
+            
+            <!-- Prefill Indicator -->
+            <div id="prefillIndicator" class="prefill-indicator" style="display: none;">
+                Form has been prefilled with data from the last record. You can modify any values before submitting.
+            </div>
+            
+            <div class="form-grid">
+                <!-- Hourly Section -->
+                <div class="form-section hourly">
+                    <h3>Inoculation System Checks</h3>
+                    <div class="form-group">
+                        <label for="flowRateRPM">Inoculation Flow Rate Setting (A) RPM:</label>
+                        <input type="number" id="flowRateRPM" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="flowRateGMS">Inoculation Flow Rate Setting (B) GMS/Sec:</label>
+                        <input type="number" id="flowRateGMS" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="airPressure">Air Pressure (Min 4.0 bar):</label>
+                        <input type="number" id="airPressure" step="0.1" min="4.0">
+                    </div>
+                    <div class="form-group">
+                        <label for="injectPressure">Inject Pressure (Max 2.0 bar):</label>
+                        <input type="number" id="injectPressure" step="0.1" max="2.0">
+                    </div>
+                    <div class="form-group">
+                        <label for="feedPipeCondition">Feed Pipe Condition:</label>
+                        <select id="feedPipeCondition">
+                            <option value="">Select condition</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Maintenance Section -->
+                 <div  class="styled-select">
+                <div class="form-section maintenance" >
+                    <h3>Maintenance Checks</h3>
+                    <div class="form-group">
+                        <label for="airLineWaterDrainage">Air Line Water Drainage:</label>
+                        <select id="airLineWaterDrainage">
+                            <option value="">Select status</option>
+                            <option value="Done">Done</option>
+                            <option value="Not Required">Not Required</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Issue Found">Issue Found</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hopperCleaning">Hopper Cleaning:</label>
+                        <select id="hopperCleaning">
+                            <option value="">Select status</option>
+                            <option value="Done">Done</option>
+                            <option value="Not Required">Not Required</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Issue Found">Issue Found</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gaugeTest">Daily Gauge Test (±10%):</label>
+                        <select id="gaugeTest">
+                            <option value="">Select result</option>
+                            <option value="Pass">Pass</option>
+                            <option value="Fail">Fail</option>
+                            <option value="Not Done">Not Done</option>
+                        </select>
+                    </div>
+                    </div>
+                </div>
+                
+                <!-- Material Section -->
+                <div class="form-section material">
+                    <h3>Material Checks</h3>
+                    <div class="form-group">
+                        <label for="powderSize">Inoculant Powder Size:</label>
+                        <input type="text" id="powderSize" placeholder="e.g., Fine, Coarse">
+                    </div>
+                    <div class="form-group">
+                        <label for="powderMoisture">Inoculant Powder Moisture (%):</label>
+                        <input type="number" id="powderMoisture" step="0.01">
+                    </div>
+                    
+                  <div class="form-group">
+                      <div class="checkbox">
+                          <input type="checkbox" id="isNewBag" class="stylish-checkbox">
+                          <label for="isNewBag">New Bag Used</label>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            
+            <!-- Single Submit Button -->
+            <div class="button-group">
+                <button class="btn-primary" onclick="submitQCData()">Submit QC Data</button>
+                <button class="btn-secondary" onclick="resetForm()">Reset Form</button>
+            </div>
+            
+            <!-- Response Message -->
+            <div id="responseMessage" class="response-message"></div>
+            
+            <!-- Last Record Display -->
+            <div class="form-section" data-aos="fade-up" data-aos-delay="300">
+                <h3>Last Record for Selected Component</h3>
+                <div id="lastRecordDisplay">
+                    <p>Select a component to view the last record.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+       document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Your existing code
+      updateHourlyTimestamp();
+      setInterval(updateHourlyTimestamp, 60000);
+    });
+        // Global variables
+        let components = [];
+        let filteredComponents = [];
+        let recentProducts = [];
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+            loadRecentProducts();
+            
+            // Add click event to close suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('#componentInput') && !e.target.closest('#componentSuggestions')) {
+                    hideSuggestions();
+                }
+            });
+            
+            // Initialize AOS animations
+            AOS.init({
+              duration: 800,
+              easing: 'ease-in-out',
+              once: true,
+              mirror: false
+            });
+        });
+
+        // Load available components
+        async function loadComponents() {
+            try {
+                const response = await fetch('http://localhost:3000/master-data');
+                components = await response.json();
+                console.log('Components loaded:', components);
+            } catch (error) {
+                console.error('Error loading components:', error);
+                showMessage('Error loading components', 'error');
+            }
+        }
+
+        // Load recent products
+        async function loadRecentProducts() {
+            try {
+                const response = await fetch(`http://localhost:3000/q03/products/search03?query=${query}`);
+                const allProducts = await response.json();
+                
+                // Show top 5 as recent (you can modify this logic)
+                recentProducts = allProducts.slice(0, 5);
+                
+                if (recentProducts.length > 0) {
+                    displayRecentProducts();
+                }
+            } catch (error) {
+                console.error('Error loading recent products:', error);
+            }
+        }
+
+        // Display recent products
+        function displayRecentProducts() {
+            const recentDiv = document.getElementById('recentProducts');
+            const listDiv = document.getElementById('recentProductsList');
+            
+            listDiv.innerHTML = '';
+            recentProducts.forEach(product => {
+                const btn = document.createElement('button');
+                btn.className = 'recent-btn';
+                btn.textContent = product.product_code;
+                btn.onclick = () => selectProduct(product);
+                listDiv.appendChild(btn);
+            });
+            
+            recentDiv.style.display = 'block';
+        }
+
+        // Filter components based on input
+        function filterComponents() {
+            const input = document.getElementById('componentInput');
+            const filter = input.value.toLowerCase();
+            
+            if (filter.length === 0) {
+                hideSuggestions();
+                return;
+            }
+            
+            filteredComponents = components.filter(component => {
+                return component.product_code.toLowerCase().includes(filter) || 
+                       component.product_description.toLowerCase().includes(filter);
+            });
+            
+            if (filteredComponents.length > 0) {
+                showSuggestions();
+            } else {
+                hideSuggestions();
+            }
+        }
+
+        // Show suggestions dropdown
+        function showSuggestions() {
+            const suggestionsDiv = document.getElementById('componentSuggestions');
+            const input = document.getElementById('componentInput');
+            const filter = input.value.toLowerCase();
+            
+            if (filter.length === 0 || filteredComponents.length === 0) {
+                hideSuggestions();
+                return;
+            }
+            
+            suggestionsDiv.innerHTML = '';
+            
+            filteredComponents.slice(0, 10).forEach(component => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'suggestion-item';
+                suggestionItem.innerHTML = `${component.product_code} - ${component.product_description}`;
+                
+                suggestionItem.addEventListener('click', function() {
+                    selectComponent(component);
+                });
+                
+                suggestionsDiv.appendChild(suggestionItem);
+            });
+            
+            suggestionsDiv.style.display = 'block';
+        }
+
+        // Hide suggestions dropdown
+        function hideSuggestions() {
+            const suggestionsDiv = document.getElementById('componentSuggestions');
+            suggestionsDiv.style.display = 'none';
+        }
+
+        // Select a component from suggestions
+        function selectComponent(component) {
+            const input = document.getElementById('componentInput');
+            const hiddenInput = document.getElementById('selectedComponent');
+            
+            input.value = `${component.product_code} - ${component.product_description}`;
+            hiddenInput.value = component.product_code;
+            
+            hideSuggestions();
+            loadLastRecord();
+        }
+
+        // Get selected component value
+        function getSelectedComponent() {
+            const hiddenInput = document.getElementById('selectedComponent');
+            return hiddenInput.value;
+        }
+
+        // Load last record for selected component
+        async function loadLastRecord() {
+            const component = getSelectedComponent();
+            if (!component) {
+                document.getElementById('lastRecordDisplay').innerHTML = '<p>Please select a component first.</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/qc/fbq03/product/${component}`);
+                const record = await response.json();
+                
+                const display = document.getElementById('lastRecordDisplay');
+                if (record) {
+                    display.innerHTML = `
+                        <p><strong>Event Time:</strong> ${new Date(record.event_time).toLocaleString()}</p>
+                        ${record.inoculation_flow_rate_rpm ? `<p><strong>Flow Rate RPM:</strong> ${record.inoculation_flow_rate_rpm}</p>` : ''}
+                        ${record.inoculation_flow_rate_gms ? `<p><strong>Flow Rate GMS:</strong> ${record.inoculation_flow_rate_gms}</p>` : ''}
+                        ${record.air_pressure ? `<p><strong>Air Pressure:</strong> ${record.air_pressure} bar</p>` : ''}
+                        ${record.inject_pressure ? `<p><strong>Inject Pressure:</strong> ${record.inject_pressure} bar</p>` : ''}
+                        ${record.feed_pipe_condition ? `<p><strong>Feed Pipe Condition:</strong> ${record.feed_pipe_condition}</p>` : ''}
+                        ${record.air_line_water_drainage ? `<p><strong>Air Line Water Drainage:</strong> ${record.air_line_water_drainage}</p>` : ''}
+                        ${record.hopper_cleaning ? `<p><strong>Hopper Cleaning:</strong> ${record.hopper_cleaning}</p>` : ''}
+                        ${record.inoculant_powder_size ? `<p><strong>Powder Size:</strong> ${record.inoculant_powder_size}</p>` : ''}
+                        ${record.inoculant_powder_moisture ? `<p><strong>Powder Moisture:</strong> ${record.inoculant_powder_moisture}%</p>` : ''}
+                        ${record.gauge_test ? `<p><strong>Gauge Test:</strong> ${record.gauge_test}</p>` : ''}
+                        ${record.is_new_bag ? `<p><strong>New Bag:</strong> ${record.is_new_bag ? 'Yes' : 'No'}</p>` : ''}
+                    `;
+                } else {
+                    display.innerHTML = '<p>No records found for this component.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading last record:', error);
+                showMessage('Error loading last record', 'error');
+            }
+        }
+
+        // Prefill form with last record data
+        async function prefillLastRecord() {
+            const component = getSelectedComponent();
+            if (!component) {
+                showMessage('Please select a component first', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/qc/fbq03?product=${component}`);
+                const record = await response.json();
+                
+                if (record) {
+                    // Prefill all fields except is_new_bag (which should default to false)
+                    document.getElementById('flowRateRPM').value = record.inoculation_flow_rate_rpm || '';
+                    document.getElementById('flowRateGMS').value = record.inoculation_flow_rate_gms || '';
+                    document.getElementById('airPressure').value = record.air_pressure || '';
+                    document.getElementById('injectPressure').value = record.inject_pressure || '';
+                    document.getElementById('feedPipeCondition').value = record.feed_pipe_condition || '';
+                    document.getElementById('airLineWaterDrainage').value = record.air_line_water_drainage || '';
+                    document.getElementById('hopperCleaning').value = record.hopper_cleaning || '';
+                    document.getElementById('powderSize').value = record.inoculant_powder_size || '';
+                    document.getElementById('powderMoisture').value = record.inoculant_powder_moisture || '';
+                    document.getElementById('gaugeTest').value = record.gauge_test || '';
+                    document.getElementById('isNewBag').checked = false; // Always reset this
+                    
+                    // Show prefill indicator
+                    document.getElementById('prefillIndicator').style.display = 'block';
+                    showMessage('Form prefilled with last record data', 'success');
+                } else {
+                    showMessage('No previous record found for this component', 'error');
+                }
+            } catch (error) {
+                console.error('Error prefilling form:', error);
+                showMessage('Error prefilling form', 'error');
+            }
+        }
+
+        // Submit QC data (single function)
+        async function submitQCData() {
+            const component = getSelectedComponent();
+            if (!component) {
+                showMessage('Please select a component first', 'error');
+                return;
+            }
+            
+            const data = {
+                component_in_production: component,
+                inoculation_flow_rate_rpm: parseFloat(document.getElementById('flowRateRPM').value) || null,
+                inoculation_flow_rate_gms: parseFloat(document.getElementById('flowRateGMS').value) || null,
+                air_pressure: parseFloat(document.getElementById('airPressure').value) || null,
+                inject_pressure: parseFloat(document.getElementById('injectPressure').value) || null,
+                feed_pipe_condition: document.getElementById('feedPipeCondition').value || null,
+                air_line_water_drainage: document.getElementById('airLineWaterDrainage').value || null,
+                hopper_cleaning: document.getElementById('hopperCleaning').value || null,
+                inoculant_powder_size: document.getElementById('powderSize').value || null,
+                inoculant_powder_moisture: parseFloat(document.getElementById('powderMoisture').value) || null,
+                is_new_bag: document.getElementById('isNewBag').checked,
+                gauge_test: document.getElementById('gaugeTest').value || null
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/qc/fbq03', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    showMessage('QC data submitted successfully!', 'success');
+                    loadLastRecord();
+                    
+                    // Clear form fields but keep component selection
+                    clearFormFields();
+                    document.getElementById('prefillIndicator').style.display = 'none';
+                } else {
+                    const error = await response.json();
+                    showMessage(`Error: ${error.error}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error submitting QC data:', error);
+                showMessage('Network error occurred', 'error');
+            }
+        }
+
+        // Clear form fields
+        function clearFormFields() {
+            document.getElementById('flowRateRPM').value = '';
+            document.getElementById('flowRateGMS').value = '';
+            document.getElementById('airPressure').value = '';
+            document.getElementById('injectPressure').value = '';
+            document.getElementById('feedPipeCondition').value = '';
+            document.getElementById('airLineWaterDrainage').value = '';
+            document.getElementById('hopperCleaning').value = '';
+            document.getElementById('powderSize').value = '';
+            document.getElementById('powderMoisture').value = '';
+            document.getElementById('gaugeTest').value = '';
+            document.getElementById('isNewBag').checked = false;
+        }
+
+        // Reset entire form
+        function resetForm() {
+            clearFormFields();
+            document.getElementById('componentInput').value = '';
+            document.getElementById('selectedComponent').value = '';
+            document.getElementById('lastRecordDisplay').innerHTML = '<p>Select a component to view the last record.</p>';
+            document.getElementById('prefillIndicator').style.display = 'none';
+            showMessage('Form reset successfully', 'success');
+        }
+
+        // Show response message
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('responseMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = `response-message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Hide preloader when page loads
+        
+        window.addEventListener('load', function() {
+      const loader = document.querySelector('.loader');
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+      }, 1000);
+    });
+
+    // Move #componentSuggestions to body and position it absolutely below the input
+    const input = document.getElementById('componentInput');
+    const suggestions = document.getElementById('componentSuggestions');
+    if (input && suggestions) {
+      // Move to body
+      document.body.appendChild(suggestions);
+      // Position on focus/input
+      function positionSuggestions() {
+        const rect = input.getBoundingClientRect();
+        suggestions.style.position = 'absolute';
+        suggestions.style.width = rect.width + 'px';
+        suggestions.style.left = rect.left + window.scrollX + 'px';
+        suggestions.style.top = rect.bottom + window.scrollY + 'px';
+        suggestions.style.zIndex = 99999;
+      }
+      input.addEventListener('focus', positionSuggestions);
+      input.addEventListener('input', positionSuggestions);
+      window.addEventListener('resize', function() {
+        if (suggestions.style.display !== 'none') positionSuggestions();
+      });
+      window.addEventListener('scroll', function() {
+        if (suggestions.style.display !== 'none') positionSuggestions();
+      }, true);
+    }
+    </script>
+</body>
+</html>
